@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Preview — TechBuild Solutions — ACAA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    /* Two-column layout */
+    .preview-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: var(--sp-6);
+      align-items: start;
+    }
+    @media (max-width: 1200px) {
+      .preview-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Browser Mockup Frame */
+    .browser-frame {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--clr-border);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+    }
+    .browser-topbar {
+      background: #f1f5f9;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--clr-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .browser-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .browser-dot.red { background: #ef4444; }
+    .browser-dot.yellow { background: #f59e0b; }
+    .browser-dot.green { background: #10b981; }
+    .browser-url-bar {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      padding: 4px 12px;
+      font-size: 12.5px;
+      font-family: monospace;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Simulated Website Content inside preview iframe */
+    .fake-website {
+      background: #0B1120;
+      color: #E2E8F0;
+      font-family: 'Inter', sans-serif;
+      min-height: 720px;
+      max-height: 780px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+    .fake-website::-webkit-scrollbar {
+      width: 8px;
+    }
+    .fake-website::-webkit-scrollbar-track {
+      background: #0B1120;
+    }
+    .fake-website::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .fw-navbar {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(11, 17, 32, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+    .fw-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 16px;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .fw-logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #2563EB, #06B6D4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #ffffff;
+    }
+    .fw-nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #94A3B8;
+    }
+    .fw-nav-links a {
+      color: #94A3B8;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .fw-nav-links a:hover {
+      color: #ffffff;
+    }
+    .fw-hero {
+      padding: 56px 28px 40px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.22) 0%, transparent 60%);
+    }
+    .fw-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(37, 99, 235, 0.35);
+      color: #60A5FA;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .fw-heading {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      max-width: 680px;
+      margin: 0 auto 16px;
+      letter-spacing: -0.8px;
+    }
+    .fw-heading span {
+      background: linear-gradient(135deg, #60A5FA, #22D3EE);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .fw-subtext {
+      font-size: 14.5px;
+      color: #94A3B8;
+      max-width: 580px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .fw-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .fw-btn-primary {
+      background: #2563EB;
+      color: #ffffff;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      border: none;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+      cursor: pointer;
+    }
+    .fw-btn-secondary {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #E2E8F0;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+    .fw-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 32px 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(15, 23, 42, 0.4);
+      margin: 32px 0;
+    }
+    .fw-metric-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .fw-metric-lbl {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-top: 2px;
+    }
+    .fw-grid-features {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .fw-feature-card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+    }
+    .fw-feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.15);
+      color: #60A5FA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .fw-feature-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .fw-feature-desc {
+      font-size: 13px;
+      color: #94A3B8;
+      line-height: 1.5;
+    }
+
+    /* Sidebar Review Panel elements */
+    .asset-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      transition: background var(--tr-fast);
+      cursor: pointer;
+    }
+    .asset-item:hover {
+      background: var(--clr-bg);
+    }
+    .asset-item.active {
+      background: var(--clr-primary-light);
+      color: var(--clr-primary);
+      font-weight: 600;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--clr-border);
+      font-size: 13px;
+    }
+    .check-row:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <a href="../dashboard.html" class="sidebar-brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <div class="brand-name">ACAA</div>
+          <div class="brand-sub">AI Client Acquisition</div>
+        </div>
+      </a>
+
+      <div class="sidebar-nav">
+        <div class="nav-group">
+          <div class="nav-group-label">Main</div>
+          <a href="../dashboard.html" class="nav-item">
+            <i class="bi bi-grid-1x2"></i>
+            <span class="nav-item-label">Overview</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">Leads</div>
+          <a href="../leads/discover.html" class="nav-item">
+            <i class="bi bi-search"></i>
+            <span class="nav-item-label">Lead Discovery</span>
+          </a>
+          <a href="../leads/index.html" class="nav-item">
+            <i class="bi bi-people"></i>
+            <span class="nav-item-label">All Leads</span>
+          </a>
+          <a href="../verification/index.html" class="nav-item">
+            <i class="bi bi-shield-check"></i>
+            <span class="nav-item-label">Verification Queue</span>
+            <span class="nav-badge">7</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">Outreach</div>
+          <a href="../outreach/editor.html" class="nav-item">
+            <i class="bi bi-robot"></i>
+            <span class="nav-item-label">AI Outreach</span>
+          </a>
+          <a href="../approvals/index.html" class="nav-item">
+            <i class="bi bi-check2-square"></i>
+            <span class="nav-item-label">Approval Center</span>
+            <span class="nav-badge">4</span>
+          </a>
+          <a href="../whatsapp/details.html" class="nav-item">
+            <i class="bi bi-whatsapp"></i>
+            <span class="nav-item-label">WhatsApp Tracking</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">Demo</div>
+          <a href="../demos/index.html" class="nav-item active">
+            <i class="bi bi-laptop"></i>
+            <span class="nav-item-label">Demo Studio</span>
+          </a>
+          <a href="../deployments/index.html" class="nav-item">
+            <i class="bi bi-cloud-upload"></i>
+            <span class="nav-item-label">Deployments</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">Reports</div>
+          <a href="../analytics/index.html" class="nav-item">
+            <i class="bi bi-bar-chart-line"></i>
+            <span class="nav-item-label">Analytics</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">Admin</div>
+          <a href="../integrations/index.html" class="nav-item">
+            <i class="bi bi-plug"></i>
+            <span class="nav-item-label">Integrations</span>
+          </a>
+          <a href="../team/index.html" class="nav-item">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-item-label">Team & Roles</span>
+          </a>
+          <a href="../audit/index.html" class="nav-item">
+            <i class="bi bi-journal-text"></i>
+            <span class="nav-item-label">Audit Log</span>
+          </a>
+          <a href="../settings/index.html" class="nav-item">
+            <i class="bi bi-gear"></i>
+            <span class="nav-item-label">Settings</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">SR</div>
+          <div class="user-info">
+            <div class="user-name">Sarah Ross</div>
+            <div class="user-role">Growth Ops Lead</div>
+          </div>
+        </div>
+        <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Toggle Sidebar">
+          <i class="bi bi-layout-sidebar"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Navigation">
+          <i class="bi bi-list"></i>
+        </button>
+
+        <div class="topbar-breadcrumb">
+          <a href="../demos/index.html">Demo Studio</a>
+          <span class="sep"><i class="bi bi-chevron-right" style="font-size:10px;"></i></span>
+          <a href="../demos/index.html">TechBuild Solutions</a>
+          <span class="sep"><i class="bi bi-chevron-right" style="font-size:10px;"></i></span>
+          <span class="current">Preview</span>
+        </div>
+
+        <div class="topbar-search">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" id="global-search" placeholder="Search leads, campaigns...">
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="notif-dot"></span>
+          </button>
+          <div class="topbar-avatar" title="Sarah Ross">SR</div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-header-left">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <h1 class="page-title">Demo Preview — TechBuild Solutions</h1>
+              <span class="badge badge-verified">Ready for Review</span>
+              <span class="badge badge-ai"><i class="bi bi-robot"></i> AI Generated</span>
+            </div>
+            <p class="page-subtitle">Interactive browser preview of AI-synthesized prototype. Review structure, Lighthouse scores, and approve for client dispatch.</p>
+          </div>
+
+          <div class="page-actions">
+            <!-- Viewport toggle bar -->
+            <div class="viewport-toggle">
+              <button class="viewport-btn active" data-viewport="desktop" onclick="setViewport('desktop', this)">
+                <i class="bi bi-display"></i> Desktop
+              </button>
+              <button class="viewport-btn" data-viewport="tablet" onclick="setViewport('tablet', this)">
+                <i class="bi bi-tablet"></i> Tablet
+              </button>
+              <button class="viewport-btn" data-viewport="mobile" onclick="setViewport('mobile', this)">
+                <i class="bi bi-phone"></i> Mobile
+              </button>
+            </div>
+
+            <a href="https://preview.acaa.io/techbuild-solutions-v1" target="_blank" class="btn btn-secondary btn-sm" title="Open in dedicated tab">
+              <i class="bi bi-box-arrow-up-right"></i> Open Link
+            </a>
+          </div>
+        </div>
+
+        <!-- Two-column Layout: Left Preview Frame, Right Sidebar -->
+        <div class="preview-layout">
+          <!-- LEFT COLUMN: PREVIEW FRAME -->
+          <div>
+            <div class="preview-frame-wrapper">
+              <div class="preview-iframe desktop" id="preview-frame-box">
+                <!-- Browser Shell -->
+                <div class="browser-frame">
+                  <div class="browser-topbar">
+                    <div class="browser-dots">
+                      <div class="browser-dot red"></div>
+                      <div class="browser-dot yellow"></div>
+                      <div class="browser-dot green"></div>
+                    </div>
+
+                    <div style="display:flex;align-items:center;gap:8px;color:#64748b;font-size:13px;">
+                      <i class="bi bi-arrow-left" style="cursor:pointer;" title="Back"></i>
+                      <i class="bi bi-arrow-right" style="cursor:pointer;" title="Forward"></i>
+                      <i class="bi bi-arrow-clockwise" style="cursor:pointer;" title="Reload" onclick="reloadPreviewSimulation()"></i>
+                    </div>
+
+                    <div class="browser-url-bar">
+                      <i class="bi bi-lock-fill text-success" title="SSL Certificate Valid (Let's Encrypt)"></i>
+                      <span>https://preview.acaa.io/techbuild-solutions-v1</span>
+                    </div>
+
+                    <div style="font-size:11px;font-weight:600;color:#64748b;" id="viewport-resolution-label">
+                      1280 &times; 800
+                    </div>
+                  </div>
+
+                  <!-- Simulated Website Content Body -->
+                  <div class="fake-website" id="fake-website-container">
+                    <!-- Website Navbar -->
+                    <header class="fw-navbar">
+                      <div class="fw-logo">
+                        <div class="fw-logo-icon"><i class="bi bi-diagram-3-fill"></i></div>
+                        <span>TechBuild Solutions</span>
+                      </div>
+                      <nav class="fw-nav-links" id="fw-nav-menu">
+                        <a href="#hero">Solutions</a>
+                        <a href="#features">Architecture</a>
+                        <a href="#pricing">ROI Calculator</a>
+                        <a href="#compliance">NESA Compliance</a>
+                        <a href="#contact">Contact</a>
+                      </nav>
+                      <div>
+                        <button class="fw-btn-primary" style="padding:7px 16px;font-size:12.5px;" onclick="showToast({title:'Interactive Preview', message:'Demo CTA triggered: Book Consultation Modal.', type:'default'})">
+                          Book Consultation
+                        </button>
+                      </div>
+                    </header>
+
+                    <!-- Hero Section -->
+                    <section class="fw-hero" id="hero">
+                      <div class="fw-badge">
+                        <i class="bi bi-shield-check"></i> DUBAI &bull; ENTERPRISE CLOUD ARCHITECTURE
+                      </div>
+                      <h1 class="fw-heading">
+                        Engineered for High-Scale Cloud &amp; <span>Resilient Infrastructure</span>
+                      </h1>
+                      <p class="fw-subtext">
+                        We help UAE and GCC enterprises accelerate multi-cloud migration, streamline automated DevOps pipelines, and guarantee 99.999% SLA high-availability compliance.
+                      </p>
+                      <div class="fw-cta-group">
+                        <button class="fw-btn-primary" onclick="showToast({title:'Demo Clicked', message:'Interactive Prototype initiated.', type:'success'})">
+                          <i class="bi bi-play-circle-fill" style="margin-right:6px;"></i> Explore Architecture Demo
+                        </button>
+                        <button class="fw-btn-secondary" onclick="showToast({title:'ROI Calculator', message:'Estimated client ROI: $180,000/yr.', type:'default'})">
+                          <i class="bi bi-calculator" style="margin-right:6px;"></i> Calculate Cloud ROI
+                        </button>
+                      </div>
+                    </section>
+
+                    <!-- Real-time Metrics Banner -->
+                    <div class="fw-metrics">
+                      <div style="text-align:center;">
+                        <div class="fw-metric-val">$48M+</div>
+                        <div class="fw-metric-lbl">Cloud Assets Managed</div>
+                      </div>
+                      <div style="text-align:center;">
+                        <div class="fw-metric-val">99.999%</div>
+                        <div class="fw-metric-lbl">High-Availability SLA</div>
+                      </div>
+                      <div style="text-align:center;">
+                        <div class="fw-metric-val">3.4&times;</div>
+                        <div class="fw-metric-lbl">Faster Deployment Cycles</div>
+                      </div>
+                      <div style="text-align:center;">
+                        <div class="fw-metric-val">NESA / ISR</div>
+                        <div class="fw-metric-lbl">Certified Compliance</div>
+                      </div>
+                    </div>
+
+                    <!-- Interactive Features Matrix -->
+                    <section style="padding: 20px 24px;" id="features">
+                      <div style="text-align:center;margin-bottom:24px;">
+                        <span style="font-size:11px;font-weight:700;letter-spacing:1px;color:#38BDF8;text-transform:uppercase;">Core Competencies</span>
+                        <h2 style="font-size:22px;color:#fff;font-weight:700;margin-top:4px;">Built for Mission-Critical Production</h2>
+                      </div>
+
+                      <div class="fw-grid-features">
+                        <div class="fw-feature-card">
+                          <div class="fw-feature-icon"><i class="bi bi-cloud-check-fill"></i></div>
+                          <div class="fw-feature-title">Multi-Cloud Migration (AWS &bull; Azure &bull; OCI)</div>
+                          <div class="fw-feature-desc">Zero-downtime database replication, containerized workloads, and localized GCC data residency compliance.</div>
+                        </div>
+
+                        <div class="fw-feature-card">
+                          <div class="fw-feature-icon"><i class="bi bi-cpu-fill"></i></div>
+                          <div class="fw-feature-title">Kubernetes &amp; Microservices Orchestration</div>
+                          <div class="fw-feature-desc">Automated horizontal auto-scaling, GitOps CI/CD pipelines, and proactive distributed tracing with OpenTelemetry.</div>
+                        </div>
+
+                        <div class="fw-feature-card">
+                          <div class="fw-feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                          <div class="fw-feature-title">UAE Compliance Automation (NESA &bull; ISR)</div>
+                          <div class="fw-feature-desc">Built-in governance rules adhering to Dubai Information Security Regulation and national cybersecurity standards.</div>
+                        </div>
+
+                        <div class="fw-feature-card">
+                          <div class="fw-feature-icon"><i class="bi bi-robot"></i></div>
+                          <div class="fw-feature-title">AI Pipeline &amp; MLOps Deployment</div>
+                          <div class="fw-feature-desc">Secure self-hosted LLM inference, GPU cluster optimization, and enterprise RAG architecture integration.</div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- Simulated Lead Capture & Contact Footer -->
+                    <footer style="padding:32px 24px;background:#060a12;border-top:1px solid rgba(255,255,255,0.06);margin-top:20px;font-size:12px;color:#64748B;">
+                      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                        <div>
+                          <strong style="color:#ffffff;font-size:13px;">TechBuild Solutions LLC</strong>
+                          <div>Dubai Internet City, Building 14 &bull; Abu Dhabi Global Market (ADGM) Square</div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:14px;color:#94A3B8;">
+                          <span>Privacy Policy</span>
+                          <span>Security Whitepaper</span>
+                          <span>ISO 27001 Certified</span>
+                        </div>
+                      </div>
+                    </footer>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: REVIEW & APPROVAL SIDEBAR -->
+          <div style="display:flex;flex-direction:column;gap:var(--sp-4);">
+            <!-- Warning Notice (1 Warning) -->
+            <div class="ai-warning" style="background:var(--clr-warning-light);border:1px solid rgba(247,144,9,0.3);border-radius:var(--radius-md);padding:12px 14px;">
+              <i class="bi bi-exclamation-triangle-fill" style="font-size:18px;color:var(--clr-warning);flex-shrink:0;margin-top:2px;"></i>
+              <div style="font-size:12.5px;color:#B54708;line-height:1.5;">
+                <strong>1 Non-Blocking Warning:</strong><br>
+                3 hero stock imagery slots are using high-res AI placeholders. Replace with client-branded photography prior to final production handoff.
+              </div>
+            </div>
+
+            <!-- Review Actions Card -->
+            <div class="card" style="box-shadow:var(--shadow-sm);">
+              <div class="card-header" style="margin-bottom:var(--sp-3);">
+                <div class="card-title"><i class="bi bi-check2-square text-primary"></i> Decision Actions</div>
+                <span class="badge badge-verified">Ready</span>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <button class="btn btn-success btn-lg" style="width:100%;justify-content:center;font-size:14.5px;" onclick="openModal('modal-approve-preview')">
+                  <i class="bi bi-check-circle-fill"></i> Approve for Preview
+                </button>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                  <button class="btn btn-secondary" onclick="openModal('modal-request-changes')">
+                    <i class="bi bi-pencil-square"></i> Request Changes
+                  </button>
+                  <button class="btn btn-outline text-danger" style="border-color:var(--clr-danger);" onclick="openModal('modal-reject-demo')">
+                    <i class="bi bi-x-circle"></i> Reject Demo
+                  </button>
+                </div>
+
+                <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;color:var(--clr-muted);" onclick="handleQuickRegen()">
+                  <i class="bi bi-arrow-repeat"></i> Regenerate with Fresh Prompt
+                </button>
+              </div>
+            </div>
+
+            <!-- Build & Test Checks -->
+            <div class="card">
+              <div class="card-header" style="margin-bottom:var(--sp-3);">
+                <div class="card-title"><i class="bi bi-shield-check text-success"></i> Build &amp; Test Audits</div>
+                <span class="badge badge-completed">5/5 Passed</span>
+              </div>
+
+              <div>
+                <div class="check-row">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-check-circle-fill text-success"></i> Build Passed (Vite 5.2)
+                  </span>
+                  <span class="badge badge-completed">0 Errors</span>
+                </div>
+                <div class="check-row">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-speedometer2 text-success"></i> Lighthouse Performance
+                  </span>
+                  <strong style="color:var(--clr-success);">94 / 100</strong>
+                </div>
+                <div class="check-row">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-phone text-success"></i> Mobile Friendly (390px Viewport)
+                  </span>
+                  <span class="badge badge-completed">Responsive</span>
+                </div>
+                <div class="check-row">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-universal-access text-warning"></i> Accessibility Score
+                  </span>
+                  <strong style="color:var(--clr-warning);">88 / 100 (Amber)</strong>
+                </div>
+                <div class="check-row">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-link-45deg text-success"></i> Broken Links &amp; Assets Check
+                  </span>
+                  <span class="badge badge-completed">100% Valid</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pages & Assets Hierarchy -->
+            <div class="card">
+              <div class="card-header" style="margin-bottom:var(--sp-3);">
+                <div class="card-title"><i class="bi bi-folder2-open text-primary"></i> Pages &amp; Bundle Assets</div>
+                <span style="font-size:11.5px;color:var(--clr-muted);">Total: 184 KB</span>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <div class="asset-item active">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-file-earmark-code"></i> index.html (Home)
+                  </span>
+                  <span class="text-muted" style="font-size:11px;">24.2 KB</span>
+                </div>
+                <div class="asset-item" onclick="showToast({title:'Switch Page', message:'Loaded about.html preview.', type:'default'})">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-file-earmark-text"></i> about.html (About Us)
+                  </span>
+                  <span class="text-muted" style="font-size:11px;">18.4 KB</span>
+                </div>
+                <div class="asset-item" onclick="showToast({title:'Switch Page', message:'Loaded services.html preview.', type:'default'})">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-file-earmark-text"></i> services.html (Cloud & DevOps)
+                  </span>
+                  <span class="text-muted" style="font-size:11px;">32.1 KB</span>
+                </div>
+                <div class="asset-item" onclick="showToast({title:'Switch Page', message:'Loaded contact.html preview.', type:'default'})">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-file-earmark-text"></i> contact.html (GCC Offices)
+                  </span>
+                  <span class="text-muted" style="font-size:11px;">14.0 KB</span>
+                </div>
+                <div class="asset-item" onclick="showToast({title:'Assets Folder', message:'12 optimized SVG and WebP assets bundled.', type:'default'})">
+                  <span style="display:flex;align-items:center;gap:8px;">
+                    <i class="bi bi-folder-symlink"></i> /assets/ (12 images, CSS, fonts)
+                  </span>
+                  <span class="text-muted" style="font-size:11px;">95.3 KB</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Version & Metadata Info -->
+            <div class="card" style="background:#F8FAFC;">
+              <div class="label" style="margin-bottom:8px;">Artifact Version Metadata</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12.5px;">
+                <div>
+                  <div class="text-muted" style="font-size:11px;">VERSION HASH</div>
+                  <div style="font-family:monospace;font-weight:700;color:var(--clr-primary);">v1.2.3-abc4d5</div>
+                </div>
+                <div>
+                  <div class="text-muted" style="font-size:11px;">GENERATED</div>
+                  <div style="font-weight:600;color:var(--clr-heading);">Nov 5, 2024 &bull; 09:32 AM</div>
+                </div>
+                <div style="grid-column: span 2;">
+                  <div class="text-muted" style="font-size:11px;">TEMPLATE USED</div>
+                  <div style="font-weight:600;color:var(--clr-heading);">B2B Enterprise SaaS Dark v2.4 (Tailwind + Alpine)</div>
+                </div>
+                <div>
+                  <div class="text-muted" style="font-size:11px;">SYNTHESIS TIME</div>
+                  <div style="font-weight:600;color:var(--clr-success);">42.1s (Automated)</div>
+                </div>
+                <div>
+                  <div class="text-muted" style="font-size:11px;">TARGET LEAD</div>
+                  <div style="font-weight:600;color:var(--clr-heading);">TechBuild Solutions</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- MODAL: APPROVE FOR PREVIEW -->
+  <div class="modal-backdrop" id="modal-approve-preview" style="display:none;">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" style="color:var(--clr-success);display:flex;align-items:center;gap:8px;">
+            <i class="bi bi-check-circle-fill"></i> Approve Demo &amp; Authorize Cloud Preview Deployment
+          </div>
+          <div style="font-size:12.5px;color:var(--clr-muted);margin-top:2px;">Final compliance sign-off for TechBuild Solutions.</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-approve-preview')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div style="background:var(--clr-bg);padding:14px 18px;border-radius:var(--radius-md);margin-bottom:18px;border:1px solid var(--clr-border);">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+            <div>
+              <div class="label" style="font-size:11px;">Target Project</div>
+              <div style="font-weight:700;font-size:14.5px;color:var(--clr-heading);">TechBuild Solutions</div>
+            </div>
+            <div>
+              <div class="label" style="font-size:11px;">Artifact Version Hash</div>
+              <div style="font-family:monospace;font-weight:700;color:var(--clr-primary);">v1.2.3-abc4d5</div>
+            </div>
+            <div style="grid-column:span 2;">
+              <div class="label" style="font-size:11px;">Preview Deployment URL</div>
+              <div style="font-family:monospace;font-size:13px;color:#1D4ED8;background:#EFF6FF;padding:6px 10px;border-radius:4px;border:1px solid #BFDBFE;">
+                https://preview.acaa.io/techbuild-solutions-v1
+              </div>
+            </div>
+            <div>
+              <div class="label" style="font-size:11px;">Expiration Window</div>
+              <div style="font-weight:600;color:var(--clr-heading);">7 Days (Expires Nov 12, 2024 at 23:59 GST)</div>
+            </div>
+            <div>
+              <div class="label" style="font-size:11px;">SSL &amp; CDN Routing</div>
+              <div style="font-weight:600;color:var(--clr-success);"><i class="bi bi-shield-check"></i> Automated Global Edge CDN</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Consequence Statement -->
+        <div style="background:#ECFDF5;border:1px solid #A7F3D0;padding:14px 16px;border-radius:var(--radius-md);margin-bottom:18px;">
+          <div style="font-weight:700;font-size:13.5px;color:#065F46;display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <i class="bi bi-info-circle-fill"></i> Consequence Statement &amp; Dispatch Pipeline
+          </div>
+          <p style="font-size:12.5px;color:#047857;line-height:1.5;margin:0;">
+            Approving this version will trigger automated deployment to cloud preview infrastructure, provision a signed SSL certificate, and make this interactive demo available for AI WhatsApp outreach dispatches and CRM demo tracking.
+          </p>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label">Approver Sign-Off Notes (Optional)</label>
+          <textarea class="form-control" rows="2" placeholder="e.g. Verified responsive scaling and GCC currency modules. Approved for WhatsApp outreach."></textarea>
+        </div>
+
+        <label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;cursor:pointer;">
+          <input type="checkbox" checked required style="margin-top:3px;">
+          <span>I confirm I have audited the generated code, confirmed company details, and verified adherence to outreach safety guardrails.</span>
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-approve-preview')">Cancel</button>
+        <button class="btn btn-success" onclick="confirmApproveDeployment()">
+          <i class="bi bi-cloud-arrow-up-fill"></i> Confirm &amp; Deploy Preview
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REQUEST CHANGES -->
+  <div class="modal-backdrop" id="modal-request-changes" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="bi bi-pencil-square text-primary"></i> Request Changes / Corrections</div>
+        <button class="modal-close" onclick="closeModal('modal-request-changes')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px;color:var(--clr-muted);margin-bottom:14px;">
+          Describe what adjustments should be made by the AI synthesis engine before re-submitting for approval.
+        </p>
+        <div class="form-group">
+          <label class="form-label">Feedback / Revision Prompts</label>
+          <textarea class="form-control" rows="4" placeholder="e.g. Please replace the generic stock icons in the feature section with cloud infrastructure icons (Docker, Kubernetes, AWS)."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-request-changes')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitChangeRequest()">Submit Revision Request</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REJECT DEMO -->
+  <div class="modal-backdrop" id="modal-reject-demo" style="display:none;">
+    <div class="modal" style="max-width:440px;">
+      <div class="modal-header">
+        <div class="modal-title text-danger"><i class="bi bi-x-octagon"></i> Reject Demo Prototype</div>
+        <button class="modal-close" onclick="closeModal('modal-reject-demo')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13.5px;color:var(--clr-text);">
+          Are you sure you want to reject this demo prototype for <strong>TechBuild Solutions</strong>?
+        </p>
+        <div class="form-group mt-3">
+          <label class="form-label">Rejection Reason</label>
+          <select class="form-control form-select">
+            <option>Lead no longer qualifies / ICP mismatch</option>
+            <option>Design quality below acceptance threshold</option>
+            <option>Client already has modern website in production</option>
+            <option>Other / Compliance concern</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-reject-demo')">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDemoRejection()">Confirm Rejection</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    function setViewport(mode, btn) {
+      document.querySelectorAll('.viewport-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const frame = document.getElementById('preview-frame-box');
+      const label = document.getElementById('viewport-resolution-label');
+      const navMenu = document.getElementById('fw-nav-menu');
+
+      frame.className = `preview-iframe ${mode}`;
+
+      if (mode === 'desktop') {
+        frame.style.width = '100%';
+        frame.style.height = 'auto';
+        label.textContent = '1280 × 800';
+        if (navMenu) navMenu.style.display = 'flex';
+      } else if (mode === 'tablet') {
+        frame.style.width = '768px';
+        frame.style.height = 'auto';
+        label.textContent = '768 × 1024';
+        if (navMenu) navMenu.style.display = 'flex';
+      } else if (mode === 'mobile') {
+        frame.style.width = '390px';
+        frame.style.height = 'auto';
+        label.textContent = '390 × 844';
+        if (navMenu) navMenu.style.display = 'none';
+      }
+
+      showToast({ title: 'Viewport Changed', message: `Preview rendered in ${mode.toUpperCase()} mode.`, type: 'default' });
+    }
+
+    function reloadPreviewSimulation() {
+      const container = document.getElementById('fake-website-container');
+      container.style.opacity = '0.4';
+      setTimeout(() => {
+        container.style.opacity = '1';
+        showToast({ title: 'Reloaded', message: 'Website preview reloaded.', type: 'default' });
+      }, 300);
+    }
+
+    function confirmApproveDeployment() {
+      closeModal('modal-approve-preview');
+      showToast({
+        title: 'Demo Approved & Deployed!',
+        message: 'Preview URL is live: https://preview.acaa.io/techbuild-solutions-v1',
+        type: 'success'
+      });
+    }
+
+    function submitChangeRequest() {
+      closeModal('modal-request-changes');
+      showToast({
+        title: 'Changes Requested',
+        message: 'Synthesis prompt queued for re-compilation.',
+        type: 'warning'
+      });
+    }
+
+    function confirmDemoRejection() {
+      closeModal('modal-reject-demo');
+      showToast({
+        title: 'Demo Rejected',
+        message: 'Project moved to rejected archive.',
+        type: 'error'
+      });
+    }
+
+    function handleQuickRegen() {
+      showToast({
+        title: 'Regeneration Queued',
+        message: 'AI agent is re-synthesizing demo with fresh variation.',
+        type: 'success'
+      });
+    }
+  </script>
+</body>
+</html>

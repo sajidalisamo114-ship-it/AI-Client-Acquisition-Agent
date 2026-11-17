@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechBuild Solutions — Lead Details | ACAA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    /* Details page custom styles */
+    .lead-header-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-xl);
+      padding: var(--sp-6);
+      margin-bottom: var(--sp-4);
+      box-shadow: var(--shadow-xs);
+    }
+    .lead-brand-header {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+    .lead-logo-badge {
+      width: 58px;
+      height: 58px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      border: 1px solid #BFDBFE;
+      color: #2563EB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .sticky-sidebar {
+      position: sticky;
+      top: calc(var(--topbar-h) + var(--sp-4));
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+    }
+    .details-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: var(--sp-6);
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .details-layout {
+        grid-template-columns: 1fr;
+      }
+      .sticky-sidebar {
+        position: static;
+      }
+    }
+    .info-list-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 12px 16px;
+      font-size: 13.5px;
+    }
+    .info-label {
+      color: var(--clr-muted);
+      font-weight: 500;
+    }
+    .info-val {
+      color: var(--clr-heading);
+      font-weight: 500;
+    }
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      color: #334155;
+      font-weight: 600;
+      margin: 2px 3px 2px 0;
+    }
+    .note-item {
+      padding: var(--sp-3);
+      border-radius: var(--radius-md);
+      background: var(--clr-bg);
+      border: 1px solid var(--clr-border);
+      margin-bottom: var(--sp-2);
+      font-size: 12.5px;
+    }
+    .demo-preview-card {
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      background: var(--clr-surface);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--tr-fast);
+    }
+    .demo-preview-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .demo-browser-bar {
+      background: #F8FAFC;
+      border-bottom: 1px solid var(--clr-border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .browser-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .browser-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .demo-canvas {
+      background: #F1F5F9;
+      padding: 24px;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <a href="../dashboard.html" class="sidebar-brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <div class="brand-name">ACAA</div>
+          <div class="brand-sub">AI Client Acquisition</div>
+        </div>
+      </a>
+
+      <div class="sidebar-nav">
+        <!-- Group: Main -->
+        <div class="nav-group">
+          <div class="nav-group-label">Main</div>
+          <a href="../dashboard.html" class="nav-item">
+            <i class="bi bi-grid-1x2"></i>
+            <span class="nav-item-label">Overview</span>
+          </a>
+        </div>
+
+        <!-- Group: Leads -->
+        <div class="nav-group">
+          <div class="nav-group-label">Leads</div>
+          <a href="../leads/discover.html" class="nav-item">
+            <i class="bi bi-search"></i>
+            <span class="nav-item-label">Lead Discovery</span>
+          </a>
+          <a href="../leads/index.html" class="nav-item active">
+            <i class="bi bi-people"></i>
+            <span class="nav-item-label">All Leads</span>
+          </a>
+          <a href="../verification/index.html" class="nav-item">
+            <i class="bi bi-shield-check"></i>
+            <span class="nav-item-label">Verification Queue</span>
+            <span class="nav-badge">7</span>
+          </a>
+        </div>
+
+        <!-- Group: Outreach -->
+        <div class="nav-group">
+          <div class="nav-group-label">Outreach</div>
+          <a href="../outreach/editor.html" class="nav-item">
+            <i class="bi bi-robot"></i>
+            <span class="nav-item-label">AI Outreach</span>
+          </a>
+          <a href="../approvals/index.html" class="nav-item">
+            <i class="bi bi-check2-square"></i>
+            <span class="nav-item-label">Approval Center</span>
+            <span class="nav-badge">4</span>
+          </a>
+          <a href="../whatsapp/details.html" class="nav-item">
+            <i class="bi bi-whatsapp"></i>
+            <span class="nav-item-label">WhatsApp Tracking</span>
+          </a>
+        </div>
+
+        <!-- Group: Demo -->
+        <div class="nav-group">
+          <div class="nav-group-label">Demo</div>
+          <a href="../demos/index.html" class="nav-item">
+            <i class="bi bi-laptop"></i>
+            <span class="nav-item-label">Demo Studio</span>
+          </a>
+          <a href="../deployments/index.html" class="nav-item">
+            <i class="bi bi-cloud-upload"></i>
+            <span class="nav-item-label">Deployments</span>
+          </a>
+        </div>
+
+        <!-- Group: Reports -->
+        <div class="nav-group">
+          <div class="nav-group-label">Reports</div>
+          <a href="../analytics/index.html" class="nav-item">
+            <i class="bi bi-bar-chart-line"></i>
+            <span class="nav-item-label">Analytics</span>
+          </a>
+        </div>
+
+        <!-- Group: Admin -->
+        <div class="nav-group">
+          <div class="nav-group-label">Admin</div>
+          <a href="../integrations/index.html" class="nav-item">
+            <i class="bi bi-plug"></i>
+            <span class="nav-item-label">Integrations</span>
+          </a>
+          <a href="../team/index.html" class="nav-item">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-item-label">Team &amp; Roles</span>
+          </a>
+          <a href="../audit/index.html" class="nav-item">
+            <i class="bi bi-journal-text"></i>
+            <span class="nav-item-label">Audit Log</span>
+          </a>
+          <a href="../settings/index.html" class="nav-item">
+            <i class="bi bi-gear"></i>
+            <span class="nav-item-label">Settings</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">AD</div>
+          <div class="user-info">
+            <div class="user-name">Alex Drake</div>
+            <div class="user-role">Operations Lead</div>
+          </div>
+        </div>
+        <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Toggle sidebar">
+          <i class="bi bi-layout-sidebar"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open sidebar">
+          <i class="bi bi-list"></i>
+        </button>
+
+        <div class="topbar-breadcrumb">
+          <a href="../leads/index.html">All Leads</a>
+          <span class="sep">/</span>
+          <span class="current">TechBuild Solutions</span>
+        </div>
+
+        <div class="topbar-search">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" id="global-search" placeholder="Search leads, companies..." autocomplete="off">
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" id="notif-btn" title="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="notif-dot"></span>
+          </button>
+          <a href="../settings/index.html" class="icon-btn" title="Settings">
+            <i class="bi bi-gear"></i>
+          </a>
+          <div class="topbar-avatar" title="Alex Drake">AD</div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header Card -->
+        <div class="lead-header-card">
+          <div class="flex items-center justify-between" style="gap:var(--sp-4);flex-wrap:wrap;">
+            <div class="lead-brand-header">
+              <div class="lead-logo-badge">TS</div>
+              <div>
+                <div class="flex items-center gap-3" style="flex-wrap:wrap;">
+                  <h1 class="page-title" style="font-size:24px;margin:0;">TechBuild Solutions</h1>
+                  <span class="badge badge-qualified">Qualified</span>
+                  <span class="score-badge score-high" title="AI ICP Qualification Score: 87/100">87/100</span>
+                </div>
+                <div class="flex items-center gap-3 mt-2 text-sm text-muted" style="flex-wrap:wrap;">
+                  <a href="https://techbuild.io" target="_blank" rel="noopener noreferrer" class="website-link" style="color:var(--clr-primary);">
+                    <i class="bi bi-globe"></i> techbuild.io <i class="bi bi-box-arrow-up-right" style="font-size:10px;"></i>
+                  </a>
+                  <span><i class="bi bi-geo-alt"></i> Dubai, United Arab Emirates</span>
+                  <span><i class="bi bi-building"></i> E-commerce Architecture</span>
+                  <span><i class="bi bi-shield-check text-success"></i> Fully Verified</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="flex items-center gap-2">
+              <a href="../outreach/editor.html?lead=techbuild" class="btn btn-primary">
+                <i class="bi bi-send-fill"></i> Generate Outreach
+              </a>
+              <a href="../demos/index.html?lead=techbuild" class="btn btn-secondary">
+                <i class="bi bi-laptop"></i> View Demo
+              </a>
+              <button class="btn btn-secondary" onclick="confirmArchiveLead()">
+                <i class="bi bi-archive"></i> Archive
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Breakdown Panel (Compact, Horizontal) -->
+        <div class="card card-sm mb-5" style="background:#FFFFFF;border-color:var(--clr-border);">
+          <div class="flex items-center justify-between mb-3">
+            <span class="label" style="font-size:11px;color:var(--clr-muted);display:flex;align-items:center;gap:6px;">
+              <i class="bi bi-speedometer2 text-primary"></i> Qualification Score Breakdown — Aggregate: 87/100
+            </span>
+            <span class="badge badge-ai" style="font-size:10px;">AI Model v2.4</span>
+          </div>
+          <div class="grid-4" style="gap:var(--sp-4);align-items:center;">
+            <!-- Website Presence: 95 -->
+            <div class="score-row" style="padding:0;background:var(--clr-bg);border-radius:var(--radius-sm);padding:8px 12px;">
+              <span class="score-row-label">Website Presence</span>
+              <div class="score-bar" style="height:7px;">
+                <div class="score-bar-fill" style="width:95%;background:var(--clr-success);" title="95%"></div>
+              </div>
+              <span class="score-row-val" style="color:#027948;">95</span>
+            </div>
+
+            <!-- Business Fit: 88 -->
+            <div class="score-row" style="padding:0;background:var(--clr-bg);border-radius:var(--radius-sm);padding:8px 12px;">
+              <span class="score-row-label">Business Fit</span>
+              <div class="score-bar" style="height:7px;">
+                <div class="score-bar-fill" style="width:88%;background:var(--clr-primary);" title="88%"></div>
+              </div>
+              <span class="score-row-val" style="color:#1D4ED8;">88</span>
+            </div>
+
+            <!-- Contact Validity: 82 -->
+            <div class="score-row" style="padding:0;background:var(--clr-bg);border-radius:var(--radius-sm);padding:8px 12px;">
+              <span class="score-row-label">Contact Validity</span>
+              <div class="score-bar" style="height:7px;">
+                <div class="score-bar-fill" style="width:82%;background:var(--clr-accent);" title="82%"></div>
+              </div>
+              <span class="score-row-val" style="color:#0891B2;">82</span>
+            </div>
+
+            <!-- Evidence Freshness: 75 -->
+            <div class="score-row" style="padding:0;background:var(--clr-bg);border-radius:var(--radius-sm);padding:8px 12px;">
+              <span class="score-row-label">Evidence Freshness</span>
+              <div class="score-bar" style="height:7px;">
+                <div class="score-bar-fill" style="width:75%;background:var(--clr-warning);" title="75%"></div>
+              </div>
+              <span class="score-row-val" style="color:#B54708;">75</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Details Layout (Tabs + Sticky Actions Sidebar) -->
+        <div class="details-layout" data-tab-group="lead-details-tabs">
+          <!-- Left Main Area with Tabs -->
+          <div class="details-main-area">
+            <!-- Tabs Header -->
+            <div class="tabs">
+              <button class="tab-btn active" data-tab="tab-overview">
+                <i class="bi bi-info-circle"></i> Overview
+              </button>
+              <button class="tab-btn" data-tab="tab-evidence">
+                <i class="bi bi-shield-check"></i> Evidence
+                <span class="badge badge-verified" style="font-size:10px;padding:1px 6px;margin-left:4px;">5</span>
+              </button>
+              <button class="tab-btn" data-tab="tab-contacts">
+                <i class="bi bi-people"></i> Contacts
+                <span class="badge" style="background:#E2E8F0;color:#334155;font-size:10px;padding:1px 6px;margin-left:4px;">3</span>
+              </button>
+              <button class="tab-btn" data-tab="tab-activity">
+                <i class="bi bi-clock-history"></i> Activity
+                <span class="badge" style="background:#E2E8F0;color:#334155;font-size:10px;padding:1px 6px;margin-left:4px;">8</span>
+              </button>
+              <button class="tab-btn" data-tab="tab-outreach">
+                <i class="bi bi-send"></i> Outreach
+                <span class="badge badge-draft-ready" style="font-size:10px;padding:1px 6px;margin-left:4px;">2</span>
+              </button>
+              <button class="tab-btn" data-tab="tab-demos">
+                <i class="bi bi-laptop"></i> Demos
+                <span class="badge badge-completed" style="font-size:10px;padding:1px 6px;margin-left:4px;">1</span>
+              </button>
+            </div>
+
+            <!-- Tab 1: Overview -->
+            <div class="tab-panel active" id="tab-overview">
+              <div class="grid-2">
+                <!-- Left Column: Business Info -->
+                <div class="card">
+                  <div class="card-header">
+                    <h2 class="card-title"><i class="bi bi-building"></i> Business Intelligence</h2>
+                    <span class="badge badge-verified"><i class="bi bi-check-lg"></i> Enriched</span>
+                  </div>
+
+                  <div class="info-list-grid mb-5">
+                    <div class="info-label">Primary Industry</div>
+                    <div class="info-val">E-commerce Architecture</div>
+
+                    <div class="info-label">Sub-Category</div>
+                    <div class="info-val">Shopify Plus &amp; Headless Portals</div>
+
+                    <div class="info-label">Headquarters</div>
+                    <div class="info-val">Dubai Internet City, Bldg 3, UAE</div>
+
+                    <div class="info-label">Website</div>
+                    <div class="info-val">
+                      <a href="https://techbuild.io" target="_blank" rel="noopener noreferrer" class="website-link">
+                        https://techbuild.io <i class="bi bi-box-arrow-up-right" style="font-size:11px;"></i>
+                      </a>
+                    </div>
+
+                    <div class="info-label">Founded Year</div>
+                    <div class="info-val">2019 (5 years active)</div>
+
+                    <div class="info-label">Headcount</div>
+                    <div class="info-val">45–60 employees (LinkedIn verified)</div>
+
+                    <div class="info-label">Estimated ARR</div>
+                    <div class="info-val">$4.2M – $6.5M USD</div>
+
+                    <div class="info-label">Primary Locale</div>
+                    <div class="info-val">English (en-AE, en-GB, ar-AE)</div>
+                  </div>
+
+                  <div class="mb-4">
+                    <span class="form-label" style="margin-bottom:6px;">Executive Description</span>
+                    <p class="text-sm" style="color:var(--clr-text);line-height:1.65;background:var(--clr-bg);padding:12px 14px;border-radius:var(--radius-md);border:1px solid var(--clr-border);">
+                      TechBuild Solutions specializes in scalable Shopify Plus architectures, custom headless store integrations, and enterprise mobile commerce applications for retail brands across the GCC and EMEA regions. They serve high-growth fashion, cosmetics, and luxury goods retailers.
+                    </p>
+                  </div>
+
+                  <div>
+                    <span class="form-label" style="margin-bottom:8px;">Detected Technology Stack</span>
+                    <div class="flex items-center" style="flex-wrap:wrap;">
+                      <span class="tech-pill"><i class="bi bi-bag-check text-success"></i> Shopify Plus</span>
+                      <span class="tech-pill"><i class="bi bi-code text-primary"></i> Next.js 14</span>
+                      <span class="tech-pill"><i class="bi bi-filetype-jsx text-accent"></i> React</span>
+                      <span class="tech-pill"><i class="bi bi-search text-warning"></i> Algolia</span>
+                      <span class="tech-pill"><i class="bi bi-envelope text-purple"></i> Klaviyo</span>
+                      <span class="tech-pill"><i class="bi bi-shield-check text-muted"></i> Cloudflare</span>
+                      <span class="tech-pill"><i class="bi bi-credit-card text-success"></i> Stripe</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right Column: AI Summary Card -->
+                <div class="ai-panel">
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="ai-label"><i class="bi bi-stars"></i> AI Synthesis &amp; ICP Angle</span>
+                    <span class="text-xs font-semibold" style="color:#5B21B6;">Confidence 94%</span>
+                  </div>
+
+                  <h3 style="font-size:16px;font-weight:700;color:var(--clr-heading);margin-bottom:8px;">
+                    Autonomous Deal Hypothesis
+                  </h3>
+                  <p class="text-sm" style="color:var(--clr-text);line-height:1.6;margin-bottom:var(--sp-4);">
+                    TechBuild Solutions is an ideal ICP fit for our autonomous client acquisition engine. While they maintain strong regional demand and an elite development reputation, our site audit reveals that their client intake and custom scoping takes an average of <strong>14 hours</strong> per inbound inquiry.
+                  </p>
+
+                  <div class="mb-4">
+                    <div class="label mb-2" style="color:#0E7490;"><i class="bi bi-bullseye"></i> Key Friction Points</div>
+                    <ul class="text-sm" style="list-style-type:disc;padding-left:18px;color:var(--clr-text);line-height:1.6;">
+                      <li>Manual technical scoping for merchant quote requests</li>
+                      <li>Slow response times on weekend demo requests</li>
+                      <li>High drop-off between preliminary inquiry and technical demo walkthrough</li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="label mb-2" style="color:#0E7490;"><i class="bi bi-lightning-charge"></i> Recommended Outreach Hook</div>
+                    <div style="background:#FFFFFF;border:1px solid rgba(6,182,212,.3);border-radius:var(--radius-md);padding:10px 12px;font-size:13px;line-height:1.5;color:var(--clr-heading);">
+                      <em>"Saw TechBuild's recent enterprise rollout for Al-Futtaim Retail. We generated an interactive 60-second headless demo sandbox showing how our AI agent qualifies your merchant leads via WhatsApp before scoping calls."</em>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="label mb-2" style="color:#0E7490;"><i class="bi bi-gift"></i> Suggested Offer</div>
+                    <p class="text-sm" style="margin:0;color:var(--clr-text);">
+                      Offer a custom pre-built interactive client demo sandbox + 14-day zero-risk trial with direct WhatsApp qualification routing to Tariq Mansoor.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 2: Evidence -->
+            <div class="tab-panel" id="tab-evidence">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="bi bi-shield-check"></i> Verification Evidence Records (5)</h2>
+                    <p class="text-xs text-muted mt-2">Verified cryptographic &amp; third-party signals confirming business legitimacy and activity.</p>
+                  </div>
+                  <button class="btn btn-sm btn-secondary" onclick="triggerReverification()">
+                    <i class="bi bi-arrow-clockwise"></i> Re-Scan All Signals
+                  </button>
+                </div>
+
+                <!-- Evidence 1: SSL & Security -->
+                <div class="evidence-item">
+                  <div class="evidence-icon" style="background:#ECFDF5;color:#027948;">
+                    <i class="bi bi-shield-lock-fill"></i>
+                  </div>
+                  <div class="evidence-info">
+                    <div class="flex items-center justify-between">
+                      <div class="evidence-title">SSL Certificate &amp; Domain Authority (Grade A+)</div>
+                      <span class="badge badge-verified">Pass</span>
+                    </div>
+                    <div class="evidence-source">
+                      <a href="https://techbuild.io" target="_blank" rel="noopener noreferrer">https://techbuild.io</a>
+                    </div>
+                    <p class="text-xs text-muted mt-2">Issued by Cloudflare Inc ECC CA-3. TLS 1.3 enabled. Domain age: 5 years, 4 months. No blacklists reported on Spamhaus or Barracuda.</p>
+                    <div class="evidence-time"><i class="bi bi-clock"></i> Retrieved: Nov 15, 2026, 09:12 AM</div>
+                  </div>
+                </div>
+
+                <!-- Evidence 2: Google Business Profile -->
+                <div class="evidence-item">
+                  <div class="evidence-icon" style="background:#EFF6FF;color:#2563EB;">
+                    <i class="bi bi-geo-alt-fill"></i>
+                  </div>
+                  <div class="evidence-info">
+                    <div class="flex items-center justify-between">
+                      <div class="evidence-title">Google Business Profile &amp; Local Verification</div>
+                      <span class="badge badge-verified">Pass (4.8★ / 42 Reviews)</span>
+                    </div>
+                    <div class="evidence-source">
+                      <a href="https://maps.google.com/?cid=9182371" target="_blank" rel="noopener noreferrer">https://maps.google.com/?cid=9182371</a>
+                    </div>
+                    <p class="text-xs text-muted mt-2">Physical address confirmed: Building 3, Ground Floor, Dubai Internet City, Dubai. High customer sentiment with recent reviews within 14 days.</p>
+                    <div class="evidence-time"><i class="bi bi-clock"></i> Retrieved: Nov 15, 2026, 09:14 AM</div>
+                  </div>
+                </div>
+
+                <!-- Evidence 3: Careers & Hiring Signals -->
+                <div class="evidence-item">
+                  <div class="evidence-icon" style="background:#ECFEFF;color:#0891B2;">
+                    <i class="bi bi-briefcase-fill"></i>
+                  </div>
+                  <div class="evidence-info">
+                    <div class="flex items-center justify-between">
+                      <div class="evidence-title">Active Engineering &amp; AI Job Openings</div>
+                      <span class="badge badge-verified">Pass (3 Open Roles)</span>
+                    </div>
+                    <div class="evidence-source">
+                      <a href="https://techbuild.io/careers" target="_blank" rel="noopener noreferrer">https://techbuild.io/careers</a>
+                    </div>
+                    <p class="text-xs text-muted mt-2">Currently hiring: Senior Shopify Plus Engineer, Next.js Frontend Developer, Client Success Lead. Indicates expanding team and active investment.</p>
+                    <div class="evidence-time"><i class="bi bi-clock"></i> Retrieved: Nov 15, 2026, 09:15 AM</div>
+                  </div>
+                </div>
+
+                <!-- Evidence 4: Tech Stack Fingerprinting -->
+                <div class="evidence-item">
+                  <div class="evidence-icon" style="background:#F5F3FF;color:#7C3AED;">
+                    <i class="bi bi-code-slash"></i>
+                  </div>
+                  <div class="evidence-info">
+                    <div class="flex items-center justify-between">
+                      <div class="evidence-title">E-commerce Tech Stack Detection</div>
+                      <span class="badge badge-verified">Pass</span>
+                    </div>
+                    <div class="evidence-source">
+                      <a href="https://techbuild.io/case-studies" target="_blank" rel="noopener noreferrer">https://techbuild.io/case-studies</a>
+                    </div>
+                    <p class="text-xs text-muted mt-2">HTML AST analysis confirmed Shopify Plus CDN assets, React 18 hydration scripts, Algolia instantsearch.js bundle, and Klaviyo track.js tracker.</p>
+                    <div class="evidence-time"><i class="bi bi-clock"></i> Retrieved: Nov 15, 2026, 09:16 AM</div>
+                  </div>
+                </div>
+
+                <!-- Evidence 5: Social Media Activity -->
+                <div class="evidence-item">
+                  <div class="evidence-icon" style="background:#FEF3F2;color:#B54708;">
+                    <i class="bi bi-twitter-x"></i>
+                  </div>
+                  <div class="evidence-info">
+                    <div class="flex items-center justify-between">
+                      <div class="evidence-title">Social Media Activity &amp; Public Brand Footprint</div>
+                      <span class="badge badge-needs-review">Warning (Inactive &gt; 60 Days)</span>
+                    </div>
+                    <div class="evidence-source">
+                      <a href="https://x.com/techbuild_io" target="_blank" rel="noopener noreferrer">https://x.com/techbuild_io</a>
+                    </div>
+                    <p class="text-xs text-muted mt-2">X/Twitter account has not posted since September 2026. However, LinkedIn company page remains highly active with weekly updates.</p>
+                    <div class="evidence-time"><i class="bi bi-clock"></i> Retrieved: Nov 15, 2026, 09:18 AM</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 3: Contacts -->
+            <div class="tab-panel" id="tab-contacts">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="bi bi-people"></i> Decision Makers &amp; Key Contacts (3)</h2>
+                    <p class="text-xs text-muted mt-2">Verified key contacts enriched via professional directory and company domain scans.</p>
+                  </div>
+                  <button class="btn btn-sm btn-primary" onclick="enrichNewContact()">
+                    <i class="bi bi-person-plus"></i> Enrich Additional Contact
+                  </button>
+                </div>
+
+                <div class="table-container mb-4">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role / Title</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>LinkedIn</th>
+                        <th>Status</th>
+                        <th style="text-align:right;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Contact 1 -->
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#DBEAFE;color:#1E40AF;">TM</div>
+                            <div>
+                              <div class="biz-name">Tariq Mansoor</div>
+                              <span class="text-xs text-muted">Primary Decision Maker</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Founder &amp; Managing Director</td>
+                        <td>
+                          <span class="masked" id="email-tariq">t.mansoor@techbuild.io</span>
+                        </td>
+                        <td>
+                          <span class="masked" id="phone-tariq">+971 50 ••• •821</span>
+                        </td>
+                        <td>
+                          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-ghost" style="padding:4px 8px;">
+                            <i class="bi bi-linkedin text-primary"></i> Profile
+                          </a>
+                        </td>
+                        <td>
+                          <span class="badge badge-verified">Verified</span>
+                        </td>
+                        <td style="text-align:right;">
+                          <a href="../outreach/editor.html?lead=techbuild&contact=tariq" class="btn btn-sm btn-secondary">
+                            <i class="bi bi-envelope"></i> Message
+                          </a>
+                        </td>
+                      </tr>
+
+                      <!-- Contact 2 -->
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#FCE7F3;color:#9D174D;">LA</div>
+                            <div>
+                              <div class="biz-name">Leila Al-Sayed</div>
+                              <span class="text-xs text-muted">Technical Champion</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Head of E-commerce Technology</td>
+                        <td>
+                          <span class="masked" id="email-leila">l.alsayed@techbuild.io</span>
+                        </td>
+                        <td>
+                          <span class="masked" id="phone-leila">+971 55 ••• •104</span>
+                        </td>
+                        <td>
+                          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-ghost" style="padding:4px 8px;">
+                            <i class="bi bi-linkedin text-primary"></i> Profile
+                          </a>
+                        </td>
+                        <td>
+                          <span class="badge badge-verified">Verified</span>
+                        </td>
+                        <td style="text-align:right;">
+                          <a href="../outreach/editor.html?lead=techbuild&contact=leila" class="btn btn-sm btn-secondary">
+                            <i class="bi bi-envelope"></i> Message
+                          </a>
+                        </td>
+                      </tr>
+
+                      <!-- Contact 3 -->
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#FEF3C7;color:#92400E;">KH</div>
+                            <div>
+                              <div class="biz-name">Karim Haddad</div>
+                              <span class="text-xs text-muted">Operations &amp; Sourcing</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Operations &amp; Procurement Lead</td>
+                        <td>
+                          <span class="masked" id="email-karim">k.haddad@techbuild.io</span>
+                        </td>
+                        <td>
+                          <span class="masked" id="phone-karim">+971 52 ••• •392</span>
+                        </td>
+                        <td>
+                          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-ghost" style="padding:4px 8px;">
+                            <i class="bi bi-linkedin text-primary"></i> Profile
+                          </a>
+                        </td>
+                        <td>
+                          <span class="badge badge-needs-review">Needs Review</span>
+                        </td>
+                        <td style="text-align:right;">
+                          <button class="btn btn-sm btn-secondary" onclick="verifyIndividualContact('Karim Haddad')">
+                            <i class="bi bi-shield-check"></i> Verify
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-muted">
+                  <span><i class="bi bi-info-circle"></i> Sensitive contact emails and phone numbers are masked for compliance.</span>
+                  <button class="btn btn-sm btn-ghost" onclick="toggleMasks()"><i class="bi bi-eye"></i> Reveal Full Coordinates</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 4: Activity -->
+            <div class="tab-panel" id="tab-activity">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="bi bi-clock-history"></i> Lead Activity &amp; Audit Trail</h2>
+                    <p class="text-xs text-muted mt-2">Comprehensive lifecycle log of all automated discoveries, scores, and team actions.</p>
+                  </div>
+                  <span class="badge badge-ai"><i class="bi bi-robot"></i> 8 Total Events</span>
+                </div>
+
+                <div class="timeline">
+                  <!-- Event 1 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#ECFDF5;color:#027948;">
+                      <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">AI Qualification Completed (Score: 87/100, Status: Qualified)</div>
+                      <div class="timeline-meta">2 hours ago · by AI Scoring Engine v2.4</div>
+                      <div class="timeline-detail">
+                        High fit detected based on e-commerce retail clientele, active engineering hiring, and modern headless stack. Recommended for immediate cold sequence generation.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Event 2 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#EFF6FF;color:#2563EB;">
+                      <i class="bi bi-shield-check"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">Verification Checks Passed (4 of 5 signals verified)</div>
+                      <div class="timeline-meta">5 hours ago · by Verification Pipeline</div>
+                      <div class="timeline-detail">
+                        SSL certificate valid, Google Business Profile rating 4.8★ confirmed, open job listings verified. Social Twitter signal flagged for manual review.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Event 3 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#F5F3FF;color:#7C3AED;">
+                      <i class="bi bi-person-check"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">Contact Enrichment Completed (Found 3 verified decision makers)</div>
+                      <div class="timeline-meta">1 day ago · by Apollo / Hunter Integration</div>
+                      <div class="timeline-detail">
+                        Identified Tariq Mansoor (Founder), Leila Al-Sayed (Head of Tech), Karim Haddad (Operations). Direct corporate email syntax: {first_initial}.{last_name}@techbuild.io.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Event 4 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#ECFEFF;color:#0891B2;">
+                      <i class="bi bi-cpu"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">Deep Scrape &amp; Tech Stack Fingerprinting Completed</div>
+                      <div class="timeline-meta">1 day ago · by Deep Crawler Subagent</div>
+                      <div class="timeline-detail">
+                        Detected Shopify Plus store architecture, Next.js frontend, Algolia instant search, and Klaviyo automated tracking scripts.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Event 5 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#EFF6FF;color:#2563EB;">
+                      <i class="bi bi-search"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">Lead Discovered via Automated Job #DISC-1049</div>
+                      <div class="timeline-meta">2 days ago · by Google Places API Crawler</div>
+                      <div class="timeline-detail">
+                        Captured from query: "E-commerce Agency, Dubai Internet City, UAE". Domain techbuild.io registered to pipeline.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Event 6 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#ECFDF5;color:#027948;">
+                      <i class="bi bi-intersect"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">Duplicate Check Clean</div>
+                      <div class="timeline-meta">2 days ago · by System Deduplicator</div>
+                      <div class="timeline-detail">
+                        Zero existing conflicts found across 1,284 current database records.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Event 7 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#FEF3C7;color:#92400E;">
+                      <i class="bi bi-person"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">Assigned to Account Owner: Alex Drake</div>
+                      <div class="timeline-meta">2 days ago · by Regional Routing Rule #Dubai-Agency</div>
+                    </div>
+                  </div>
+
+                  <!-- Event 8 -->
+                  <div class="timeline-item">
+                    <div class="timeline-dot" style="background:#F1F5F9;color:#64748B;">
+                      <i class="bi bi-plus-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-action">Initial Domain Record &amp; DNS Profile Created</div>
+                      <div class="timeline-meta">3 days ago · by Lead Discovery Service</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 5: Outreach -->
+            <div class="tab-panel" id="tab-outreach">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="bi bi-send"></i> AI Outreach Drafts (2)</h2>
+                    <p class="text-xs text-muted mt-2">Customized outbound proposals generated specifically for TechBuild Solutions.</p>
+                  </div>
+                  <a href="../outreach/editor.html?lead=techbuild" class="btn btn-sm btn-primary">
+                    <i class="bi bi-pencil-square"></i> Open in Editor
+                  </a>
+                </div>
+
+                <!-- Draft 1: Email -->
+                <div class="card mb-4" style="background:#F8FAFC;border:1px solid var(--clr-border);">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <span class="badge" style="background:#EFF6FF;color:#1D4ED8;"><i class="bi bi-envelope"></i> Email Sequence</span>
+                      <span class="badge badge-draft-ready">Draft Ready</span>
+                      <span class="text-xs text-muted">Step 1 of 3</span>
+                    </div>
+                    <span class="text-xs font-semibold text-primary">AI Confidence: 92%</span>
+                  </div>
+
+                  <div class="mb-3">
+                    <div class="text-xs text-muted">Subject Line:</div>
+                    <div style="font-weight:600;font-size:14px;color:var(--clr-heading);">
+                      Quick question regarding TechBuild's Shopify Plus demo sandboxes
+                    </div>
+                  </div>
+
+                  <div class="mb-4 text-sm" style="background:#FFFFFF;border:1px solid var(--clr-border);padding:14px;border-radius:var(--radius-md);line-height:1.6;color:var(--clr-text);">
+                    <p>Hi Tariq,</p>
+                    <p style="margin-top:8px;">Came across TechBuild's recent enterprise rollout for Al-Futtaim Retail in Dubai—very impressive headless performance.</p>
+                    <p style="margin-top:8px;">We noticed that preparing custom store demo sandboxes for prospective retail merchants typically takes senior dev teams 10+ hours per pitch. We generated an autonomous AI client acquisition preview that builds bespoke 60-second interactive store demos on demand.</p>
+                    <p style="margin-top:8px;">Would you be opposed to seeing a 2-minute preview of what this looks like for TechBuild?</p>
+                    <p style="margin-top:8px;">Best regards,<br>Alex Drake · ACAA Team</p>
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-muted">Target Recipient: Tariq Mansoor (Founder)</span>
+                    <div class="flex gap-2">
+                      <a href="../outreach/editor.html?lead=techbuild&draft=email1" class="btn btn-sm btn-secondary">
+                        <i class="bi bi-pencil"></i> Customize
+                      </a>
+                      <a href="../approvals/index.html?lead=techbuild" class="btn btn-sm btn-primary">
+                        <i class="bi bi-check2-circle"></i> Send to Approval Center
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Draft 2: WhatsApp -->
+                <div class="card" style="background:#F8FAFC;border:1px solid var(--clr-border);">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <span class="badge" style="background:#ECFDF5;color:#047857;"><i class="bi bi-whatsapp"></i> WhatsApp Direct</span>
+                      <span class="badge badge-pending">Needs Approval</span>
+                    </div>
+                    <span class="text-xs text-muted">Direct Mobile Ping</span>
+                  </div>
+
+                  <div class="mb-3 text-sm" style="background:#FFFFFF;border:1px solid var(--clr-border);padding:14px;border-radius:var(--radius-md);line-height:1.6;color:var(--clr-text);">
+                    <p>Salam Tariq, saw your recent talk on headless commerce in Dubai Internet City. We put together a 60-second interactive prototype showing how TechBuild could automate merchant qualification sandboxes: <strong>https://acaa.demo/techbuild-sandbox</strong></p>
+                    <p style="margin-top:8px;">Thought this might save your pre-sales devs some weekend scoping time. Let me know if you want the full access link!</p>
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-muted">Target Mobile: +971 50 *** 4821</span>
+                    <div class="flex gap-2">
+                      <a href="../whatsapp/details.html?lead=techbuild" class="btn btn-sm btn-secondary">
+                        <i class="bi bi-whatsapp"></i> WhatsApp Preview
+                      </a>
+                      <a href="../approvals/index.html?lead=techbuild" class="btn btn-sm btn-primary">
+                        <i class="bi bi-check2"></i> Approve Message
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 6: Demos -->
+            <div class="tab-panel" id="tab-demos">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="bi bi-laptop"></i> Tailored Demo Environments (1)</h2>
+                    <p class="text-xs text-muted mt-2">Interactive, deployed demo prototypes generated autonomously to win this client.</p>
+                  </div>
+                  <button class="btn btn-sm btn-primary" onclick="openModal('build-demo-modal')">
+                    <i class="bi bi-plus-lg"></i> Build New Demo
+                  </button>
+                </div>
+
+                <!-- Demo Card -->
+                <div class="demo-preview-card">
+                  <div class="demo-browser-bar">
+                    <div class="browser-dots">
+                      <div class="browser-dot" style="background:#EF4444;"></div>
+                      <div class="browser-dot" style="background:#F59E0B;"></div>
+                      <div class="browser-dot" style="background:#10B981;"></div>
+                    </div>
+                    <div style="background:#FFFFFF;border:1px solid var(--clr-border);border-radius:var(--radius-sm);padding:3px 12px;font-size:12px;color:var(--clr-muted);flex:1;max-width:420px;display:flex;align-items:center;gap:6px;">
+                      <i class="bi bi-lock-fill text-success" style="font-size:10px;"></i>
+                      <span>https://preview.acaa.agency/demos/techbuild-recommender-v1</span>
+                    </div>
+                    <span class="badge badge-completed"><i class="bi bi-cloud-check"></i> Live &amp; Deployed</span>
+                  </div>
+
+                  <div class="demo-canvas">
+                    <div style="background:#FFFFFF;border:1px solid var(--clr-border);border-radius:var(--radius-md);padding:24px;width:100%;max-width:580px;box-shadow:var(--shadow-sm);text-align:center;">
+                      <div style="display:inline-flex;padding:10px;background:#EFF6FF;color:#2563EB;border-radius:var(--radius-md);margin-bottom:12px;font-size:24px;">
+                        <i class="bi bi-cart4"></i>
+                      </div>
+                      <h3 style="font-size:16px;font-weight:700;color:var(--clr-heading);margin-bottom:6px;">
+                        TechBuild Intelligent Product Recommender
+                      </h3>
+                      <p class="text-xs text-muted mb-4">
+                        Autonomous Headless Commerce Recommender Engine built for TechBuild Solutions client presentations.
+                      </p>
+                      <div class="flex items-center justify-between text-xs text-muted" style="border-top:1px solid var(--clr-border);padding-top:12px;margin-top:12px;">
+                        <span>Framework: React 18 + Tailwind</span>
+                        <span>Generated: Nov 16, 2026, 04:30 PM</span>
+                        <span>Views: 3 internal</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="p-5 flex items-center justify-between" style="background:#FFFFFF;border-top:1px solid var(--clr-border);flex-wrap:wrap;gap:12px;">
+                    <div>
+                      <div class="font-semibold text-sm">Demo Sandbox: V1 Stable Build</div>
+                      <div class="text-xs text-muted">Deployed to Global CDN with instant WhatsApp lead capture form.</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button class="btn btn-sm btn-secondary" onclick="copyDemoLink()">
+                        <i class="bi bi-clipboard"></i> Copy Link
+                      </button>
+                      <button class="btn btn-sm btn-secondary" onclick="regenerateDemo()">
+                        <i class="bi bi-arrow-clockwise"></i> Regenerate
+                      </button>
+                      <a href="../demos/index.html?demo=techbuild" class="btn btn-sm btn-primary">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Demo Studio
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Sidebar (Sticky) -->
+          <div class="sticky-sidebar">
+            <!-- Card 1: Lead Actions -->
+            <div class="card">
+              <h2 class="card-title mb-4" style="font-size:14px;display:flex;align-items:center;gap:6px;">
+                <i class="bi bi-lightning-charge text-primary"></i> Lead Actions
+              </h2>
+
+              <div class="flex flex-col gap-2">
+                <a href="../outreach/editor.html?lead=techbuild" class="btn btn-primary w-full" style="justify-content:center;">
+                  <i class="bi bi-robot"></i> Generate Outreach Draft
+                </a>
+                <a href="../demos/index.html?lead=techbuild" class="btn btn-secondary w-full" style="justify-content:center;">
+                  <i class="bi bi-laptop"></i> View Demo Sandbox
+                </a>
+                <button class="btn btn-secondary w-full" style="justify-content:center;" onclick="triggerReverification()">
+                  <i class="bi bi-shield-check"></i> Re-Run Verification
+                </button>
+                <button class="btn btn-secondary w-full" style="justify-content:center;" onclick="exportLeadDossier()">
+                  <i class="bi bi-file-earmark-pdf"></i> Export Lead Dossier
+                </button>
+                <button class="btn btn-secondary w-full" style="justify-content:center;" onclick="addLeadToCampaign()">
+                  <i class="bi bi-plus-circle"></i> Add to Campaign
+                </button>
+                <div class="divider" style="margin:var(--sp-2) 0;"></div>
+                <button class="btn btn-outline btn-danger w-full" style="justify-content:center;" onclick="confirmDncLead()">
+                  <i class="bi bi-slash-circle"></i> Mark as DNC
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Lead Metadata & Ownership -->
+            <div class="card">
+              <h2 class="card-title mb-3" style="font-size:14px;display:flex;align-items:center;gap:6px;">
+                <i class="bi bi-info-circle text-muted"></i> Lead Metadata
+              </h2>
+              <div class="info-list-grid" style="grid-template-columns: 100px 1fr; font-size:12.5px;">
+                <div class="info-label">Assigned:</div>
+                <div class="info-val flex items-center gap-2">
+                  <span class="owner-avatar-mini" style="background:#DBEAFE;color:#1E40AF;">AD</span>
+                  <span>Alex Drake</span>
+                </div>
+
+                <div class="info-label">Pipeline:</div>
+                <div class="info-val"><span class="badge badge-qualified" style="font-size:11px;">Qualified</span></div>
+
+                <div class="info-label">Source:</div>
+                <div class="info-val text-ellipsis" title="Google Places Job #DISC-1049">Google Places #1049</div>
+
+                <div class="info-label">Discovered:</div>
+                <div class="info-val">Nov 14, 2026</div>
+
+                <div class="info-label">Last Sync:</div>
+                <div class="info-val">2 hours ago</div>
+              </div>
+            </div>
+
+            <!-- Card 3: Internal Notes -->
+            <div class="card">
+              <div class="card-header" style="margin-bottom:var(--sp-3);">
+                <h2 class="card-title" style="font-size:14px;display:flex;align-items:center;gap:6px;">
+                  <i class="bi bi-journal-text text-accent"></i> Notes
+                </h2>
+                <span class="badge" style="background:#F1F5F9;color:#475569;font-size:10px;">2 saved</span>
+              </div>
+
+              <!-- Notes Input -->
+              <div class="form-group mb-3">
+                <textarea id="lead-notes-input" class="form-control" rows="3" placeholder="Add confidential notes on TechBuild Solutions..." style="font-size:12.5px;"></textarea>
+                <div class="flex justify-between items-center mt-2">
+                  <span class="text-xs text-muted" id="note-saved-status">Autosave ready</span>
+                  <button class="btn btn-sm btn-primary" onclick="handleSaveNote()">
+                    <i class="bi bi-check"></i> Save Note
+                  </button>
+                </div>
+              </div>
+
+              <!-- Existing Notes List -->
+              <div id="notes-list-container">
+                <div class="note-item">
+                  <div class="flex items-center justify-between text-xs text-muted mb-1">
+                    <strong>Alex Drake</strong>
+                    <span>Yesterday, 04:15 PM</span>
+                  </div>
+                  <div style="color:var(--clr-heading);">
+                    Checked their case studies on Al-Futtaim. Tariq is most active on LinkedIn around 10:00 AM Gulf Standard Time.
+                  </div>
+                </div>
+
+                <div class="note-item">
+                  <div class="flex items-center justify-between text-xs text-muted mb-1">
+                    <strong>Sarah Chen</strong>
+                    <span>2 days ago</span>
+                  </div>
+                  <div style="color:var(--clr-heading);">
+                    Confirmed the listed headquarters phone number connects directly to their main office receptionist.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Modal: Build Demo Prototype -->
+  <div class="modal-backdrop" id="build-demo-modal" style="display:none;">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Generate AI Demo Sandbox</h2>
+          <p class="text-xs text-muted mt-2">Create a new interactive prototype tailored to TechBuild Solutions.</p>
+        </div>
+        <button class="modal-close" data-modal-close="build-demo-modal"><i class="bi bi-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="demo-template-select">Demo Prototype Concept</label>
+          <select id="demo-template-select" class="form-control form-select">
+            <option value="recommender">E-commerce Headless AI Recommender (Shopify Plus)</option>
+            <option value="checkout">Frictionless 1-Click WhatsApp Checkout Portal</option>
+            <option value="support">Autonomous Client Intake &amp; Scoping Bot</option>
+          </select>
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label" for="demo-custom-prompt">Custom AI Prompt Additions</label>
+          <textarea id="demo-custom-prompt" class="form-control" rows="3" placeholder="e.g. Include luxury watch demo inventory with Arabic and English currency toggles (AED / USD)..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-modal-close="build-demo-modal">Cancel</button>
+        <button class="btn btn-primary" onclick="submitDemoBuild()"><i class="bi bi-cpu"></i> Start Generation Job</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/app.js"></script>
+  <script>
+    // Tab switching support is natively wired via app.js with data-tab-group="lead-details-tabs"
+
+    function handleSaveNote() {
+      const input = document.getElementById('lead-notes-input');
+      const text = (input?.value || '').trim();
+      if (!text) {
+        if (window.showToast) {
+          showToast({ title: 'Note Empty', message: 'Please write a note before saving.', type: 'warning' });
+        }
+        return;
+      }
+
+      const container = document.getElementById('notes-list-container');
+      const noteEl = document.createElement('div');
+      noteEl.className = 'note-item';
+      noteEl.style.animation = 'fadeIn 0.2s ease';
+      noteEl.innerHTML = `
+        <div class="flex items-center justify-between text-xs text-muted mb-1">
+          <strong>Alex Drake</strong>
+          <span>Just now</span>
+        </div>
+        <div style="color:var(--clr-heading);">${escapeHtml(text)}</div>
+      `;
+      container.prepend(noteEl);
+      input.value = '';
+
+      if (window.showToast) {
+        showToast({ title: 'Note Saved', message: 'Note added to TechBuild Solutions dossier.', type: 'success' });
+      }
+    }
+
+    function toggleMasks() {
+      const tariqEmail = document.getElementById('email-tariq');
+      const tariqPhone = document.getElementById('phone-tariq');
+      const leilaEmail = document.getElementById('email-leila');
+      const leilaPhone = document.getElementById('phone-leila');
+      const karimEmail = document.getElementById('email-karim');
+      const karimPhone = document.getElementById('phone-karim');
+
+      if (tariqEmail.textContent.includes('•')) {
+        tariqEmail.textContent = 't.mansoor@techbuild.io';
+        tariqPhone.textContent = '+971 50 341 4821';
+        leilaEmail.textContent = 'l.alsayed@techbuild.io';
+        leilaPhone.textContent = '+971 55 892 9104';
+        karimEmail.textContent = 'k.haddad@techbuild.io';
+        karimPhone.textContent = '+971 52 710 3392';
+        showToast({ title: 'Coordinates Unmasked', message: 'Full contact records revealed.', type: 'default' });
+      } else {
+        tariqEmail.textContent = 't.mansoor@techbuild.io';
+        tariqPhone.textContent = '+971 50 ••• •821';
+        leilaPhone.textContent = '+971 55 ••• •104';
+        karimPhone.textContent = '+971 52 ••• •392';
+      }
+    }
+
+    function confirmArchiveLead() {
+      if (window.confirmAction) {
+        confirmAction({
+          title: 'Archive TechBuild Solutions?',
+          message: 'The lead will be archived. All scheduled outreach drafts will be paused.',
+          confirmText: 'Archive Lead',
+          type: 'warning',
+          onConfirm: () => {
+            showToast({ title: 'Archived', message: 'TechBuild Solutions has been archived.', type: 'default' });
+          }
+        });
+      }
+    }
+
+    function confirmDncLead() {
+      if (window.confirmAction) {
+        confirmAction({
+          title: 'Mark TechBuild Solutions as DNC?',
+          message: 'This will immediately revoke all outreach drafts and blacklist techbuild.io from future campaigns.',
+          confirmText: 'Confirm Blacklist',
+          type: 'danger',
+          onConfirm: () => {
+            showToast({ title: 'Blacklisted', message: 'TechBuild Solutions marked as Do Not Contact.', type: 'error' });
+          }
+        });
+      }
+    }
+
+    function triggerReverification() {
+      if (window.showToast) {
+        showToast({
+          title: 'Re-Verification Enqueued',
+          message: 'Running DNS probe, SSL validation, and careers page scanner...',
+          type: 'default'
+        });
+      }
+    }
+
+    function exportLeadDossier() {
+      if (window.showToast) {
+        showToast({
+          title: 'Dossier Exported',
+          message: 'Generated PDF executive briefing for TechBuild Solutions.',
+          type: 'success'
+        });
+      }
+    }
+
+    function addLeadToCampaign() {
+      if (window.showToast) {
+        showToast({
+          title: 'Campaign Updated',
+          message: 'Added TechBuild to "GCC Enterprise E-commerce Q4 Cadence".',
+          type: 'success'
+        });
+      }
+    }
+
+    function copyDemoLink() {
+      const url = 'https://preview.acaa.agency/demos/techbuild-recommender-v1';
+      navigator.clipboard?.writeText(url).catch(() => {});
+      if (window.showToast) {
+        showToast({
+          title: 'Link Copied',
+          message: 'Demo URL copied to clipboard: ' + url,
+          type: 'success'
+        });
+      }
+    }
+
+    function regenerateDemo() {
+      if (window.showToast) {
+        showToast({
+          title: 'Regeneration Queued',
+          message: 'AI agent is re-building the demo sandbox with latest company styling.',
+          type: 'default'
+        });
+      }
+    }
+
+    function submitDemoBuild() {
+      closeModal('build-demo-modal');
+      if (window.showToast) {
+        showToast({
+          title: 'Demo Build Initialized',
+          message: 'Generating new prototype using V0 and Supabase backend.',
+          type: 'success'
+        });
+      }
+    }
+
+    function verifyIndividualContact(name) {
+      if (window.showToast) {
+        showToast({
+          title: 'Verifying Contact',
+          message: `Sending SMTP ping and mailbox validation for ${name}...`,
+          type: 'default'
+        });
+      }
+    }
+
+    function enrichNewContact() {
+      if (window.showToast) {
+        showToast({
+          title: 'Contact Enrichment',
+          message: 'Querying executive database for additional TechBuild leads...',
+          type: 'default'
+        });
+      }
+    }
+
+    function escapeHtml(string) {
+      const div = document.createElement('div');
+      div.textContent = string;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

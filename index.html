@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics & Reports — ACAA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    /* ── Date Range Filter Bar ── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-3) var(--sp-4);
+      margin-bottom: var(--sp-6);
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-xs);
+    }
+    .filter-bar-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--clr-muted);
+      margin-right: var(--sp-2);
+    }
+    .range-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-bg);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--clr-muted);
+      cursor: pointer;
+      transition: all var(--tr-fast);
+    }
+    .range-btn:hover { border-color: var(--clr-primary); color: var(--clr-primary); background: var(--clr-primary-light); }
+    .range-btn.active { background: var(--clr-primary); color: #fff; border-color: var(--clr-primary); }
+    .filter-bar-sep { flex: 1; }
+
+    /* ── Chart Sections ── */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--sp-6);
+    }
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-6);
+    }
+    .chart-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-6);
+      box-shadow: var(--shadow-xs);
+    }
+    .chart-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--sp-5);
+    }
+    .chart-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--clr-heading);
+    }
+    .chart-card-sub {
+      font-size: 12.5px;
+      color: var(--clr-muted);
+      margin-top: 2px;
+    }
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    /* ── Funnel Conversion Annotations ── */
+    .funnel-annotations {
+      display: flex;
+      gap: var(--sp-2);
+      flex-wrap: wrap;
+      margin-top: var(--sp-4);
+    }
+    .funnel-conv {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: var(--clr-bg);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      color: var(--clr-muted);
+    }
+    .funnel-conv strong { color: var(--clr-heading); }
+    .funnel-conv .arrow { color: var(--clr-primary); font-size: 11px; }
+
+    /* ── Outreach Outcomes Stat Row ── */
+    .outcomes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: var(--sp-4);
+    }
+    .outcome-card {
+      background: var(--clr-bg);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      padding: var(--sp-4);
+      text-align: center;
+    }
+    .outcome-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--clr-heading);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .outcome-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--clr-muted);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-top: 4px;
+    }
+    .outcome-pct {
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .outcome-pct.good { color: var(--clr-success); }
+    .outcome-pct.warn { color: var(--clr-warning); }
+    .outcome-pct.info { color: var(--clr-primary); }
+
+    /* ── Demo/Deployment Metrics ── */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-6);
+      align-items: start;
+    }
+    .demo-stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-5);
+    }
+    .demo-stat {
+      background: var(--clr-bg);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      padding: var(--sp-4);
+      text-align: center;
+    }
+    .demo-stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--clr-heading);
+      letter-spacing: -1px;
+    }
+    .demo-stat-label {
+      font-size: 11.5px;
+      color: var(--clr-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-top: 4px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .charts-row { grid-template-columns: 1fr; }
+      .demo-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .outcomes-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <a class="sidebar-brand" href="../dashboard.html">
+      <div class="brand-mark">AC</div>
+      <div>
+        <div class="brand-name">ACAA</div>
+        <div class="brand-sub">AI Client Acquisition</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">Main</div>
+        <a class="nav-item" href="../dashboard.html"><i class="bi bi-grid-1x2"></i><span class="nav-item-label">Overview</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Leads</div>
+        <a class="nav-item" href="../leads/discover.html"><i class="bi bi-search"></i><span class="nav-item-label">Lead Discovery</span></a>
+        <a class="nav-item" href="../leads/index.html"><i class="bi bi-people"></i><span class="nav-item-label">All Leads</span></a>
+        <a class="nav-item" href="../verification/index.html"><i class="bi bi-shield-check"></i><span class="nav-item-label">Verification Queue</span><span class="nav-badge">7</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Outreach</div>
+        <a class="nav-item" href="../outreach/editor.html"><i class="bi bi-robot"></i><span class="nav-item-label">AI Outreach</span></a>
+        <a class="nav-item" href="../approvals/index.html"><i class="bi bi-check2-square"></i><span class="nav-item-label">Approval Center</span><span class="nav-badge">4</span></a>
+        <a class="nav-item" href="../whatsapp/details.html"><i class="bi bi-whatsapp"></i><span class="nav-item-label">WhatsApp Tracking</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Demo</div>
+        <a class="nav-item" href="../demos/index.html"><i class="bi bi-laptop"></i><span class="nav-item-label">Demo Studio</span></a>
+        <a class="nav-item" href="../deployments/index.html"><i class="bi bi-cloud-upload"></i><span class="nav-item-label">Deployments</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Reports</div>
+        <a class="nav-item active" href="../analytics/index.html"><i class="bi bi-bar-chart-line"></i><span class="nav-item-label">Analytics</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Admin</div>
+        <a class="nav-item" href="../integrations/index.html"><i class="bi bi-plug"></i><span class="nav-item-label">Integrations</span></a>
+        <a class="nav-item" href="../team/index.html"><i class="bi bi-people-fill"></i><span class="nav-item-label">Team & Roles</span></a>
+        <a class="nav-item" href="../audit/index.html"><i class="bi bi-journal-text"></i><span class="nav-item-label">Audit Log</span></a>
+        <a class="nav-item" href="../settings/index.html"><i class="bi bi-gear"></i><span class="nav-item-label">Settings</span></a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">SM</div>
+        <div class="user-info">
+          <div class="user-name">Sarah Mitchell</div>
+          <div class="user-role">Admin</div>
+        </div>
+      </div>
+      <button class="sidebar-collapse-btn" id="sidebar-collapse-btn"><i class="bi bi-layout-sidebar"></i></button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN WRAPPER ══ -->
+  <div class="main-wrapper">
+    <header class="topbar">
+      <button class="icon-btn" id="mobile-menu-btn"><i class="bi bi-list"></i></button>
+      <div class="topbar-breadcrumb">
+        <a href="../dashboard.html">Home</a>
+        <span class="sep"><i class="bi bi-chevron-right" style="font-size:11px;"></i></span>
+        <span class="current">Analytics & Reports</span>
+      </div>
+      <div class="topbar-search">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" id="global-search" placeholder="Search…">
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="notif-btn" title="Notifications">
+          <i class="bi bi-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="topbar-avatar" title="Sarah Mitchell">SM</div>
+      </div>
+    </header>
+    <div id="sidebar-overlay"></div>
+
+    <main class="main-content">
+      <!-- Page Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-6);flex-wrap:wrap;gap:var(--sp-3);">
+        <div>
+          <h1 class="page-title">Analytics & Reports</h1>
+          <p class="page-subtitle">Pipeline performance, outreach effectiveness, and deployment metrics — updated hourly.</p>
+        </div>
+        <button class="btn btn-secondary" onclick="exportCSV()">
+          <i class="bi bi-download"></i> Export CSV
+        </button>
+      </div>
+
+      <!-- Date Range Filter Bar -->
+      <div class="filter-bar">
+        <span class="filter-bar-label"><i class="bi bi-calendar3"></i> Period:</span>
+        <button class="range-btn" onclick="setRange(this, 'week')">This Week</button>
+        <button class="range-btn active" onclick="setRange(this, 'month')">This Month</button>
+        <button class="range-btn" onclick="setRange(this, '3months')">Last 3 Months</button>
+        <button class="range-btn" onclick="setRange(this, 'custom')">Custom</button>
+        <span class="filter-bar-sep"></span>
+        <div id="custom-range" style="display:none;align-items:center;gap:var(--sp-2);">
+          <input type="date" class="form-control" style="width:150px;padding:6px 10px;" value="2026-10-01">
+          <span style="color:var(--clr-muted);">—</span>
+          <input type="date" class="form-control" style="width:150px;padding:6px 10px;" value="2026-11-17">
+          <button class="btn btn-primary btn-sm">Apply</button>
+        </div>
+        <span style="font-size:12.5px;color:var(--clr-muted);">Showing: <strong style="color:var(--clr-heading);">1 Nov – 17 Nov 2026</strong></span>
+      </div>
+
+      <div class="analytics-grid">
+
+        <!-- ── Section 1: Lead Funnel ── -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <div class="chart-card-title"><i class="bi bi-funnel" style="color:var(--clr-primary);margin-right:6px;"></i>Lead Funnel</div>
+              <div class="chart-card-sub">Total pipeline volume and stage conversion rates</div>
+            </div>
+            <span class="badge badge-processing">Live</span>
+          </div>
+          <div class="chart-wrap" style="height:320px;">
+            <canvas id="funnelChart"></canvas>
+          </div>
+          <div class="funnel-annotations">
+            <div class="funnel-conv"><span class="arrow">→</span> Discovered→Verified: <strong>65.9%</strong></div>
+            <div class="funnel-conv"><span class="arrow">→</span> Verified→Qualified: <strong>36.8%</strong></div>
+            <div class="funnel-conv"><span class="arrow">→</span> Qualified→Draft: <strong>28.5%</strong></div>
+            <div class="funnel-conv"><span class="arrow">→</span> Draft→Approved: <strong>68.5%</strong></div>
+            <div class="funnel-conv"><span class="arrow">→</span> Approved→Sent: <strong>88.5%</strong></div>
+            <div class="funnel-conv"><span class="arrow">→</span> Sent→Demo: <strong>57.4%</strong></div>
+            <div class="funnel-conv"><span class="arrow">→</span> Demo→Deployed: <strong>74.2%</strong></div>
+            <div class="funnel-conv" style="border-color:var(--clr-success);background:var(--clr-success-light);color:var(--clr-success);"><i class="bi bi-trophy"></i> End-to-end: <strong>1.8%</strong></div>
+          </div>
+        </div>
+
+        <!-- ── Section 2: Side-by-side Charts ── -->
+        <div class="charts-row">
+          <!-- Source Performance -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title"><i class="bi bi-bar-chart" style="color:var(--clr-accent);margin-right:6px;"></i>Source Performance</div>
+                <div class="chart-card-sub">Leads discovered per source</div>
+              </div>
+            </div>
+            <div class="chart-wrap" style="height:260px;">
+              <canvas id="sourceChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Qualification by Category -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title"><i class="bi bi-pie-chart" style="color:var(--clr-purple);margin-right:6px;"></i>Qualification by Category</div>
+                <div class="chart-card-sub">Industry distribution of qualified leads</div>
+              </div>
+            </div>
+            <div class="chart-wrap" style="height:220px;">
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--sp-4);">
+              <div style="display:flex;align-items:center;gap:5px;font-size:12px;"><span style="width:10px;height:10px;border-radius:50%;background:#2563EB;display:inline-block;"></span>E-commerce 32%</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:12px;"><span style="width:10px;height:10px;border-radius:50%;background:#06B6D4;display:inline-block;"></span>Real Estate 24%</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:12px;"><span style="width:10px;height:10px;border-radius:50%;background:#12B76A;display:inline-block;"></span>Healthcare 19%</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:12px;"><span style="width:10px;height:10px;border-radius:50%;background:#F79009;display:inline-block;"></span>Finance 15%</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:12px;"><span style="width:10px;height:10px;border-radius:50%;background:#98A2B3;display:inline-block;"></span>Other 10%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Section 3: Outreach Outcomes ── -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <div class="chart-card-title"><i class="bi bi-send" style="color:var(--clr-success);margin-right:6px;"></i>Outreach Outcomes</div>
+              <div class="chart-card-sub">WhatsApp message funnel for the selected period</div>
+            </div>
+            <a href="../whatsapp/details.html" class="btn btn-secondary btn-sm">View Details <i class="bi bi-arrow-right"></i></a>
+          </div>
+          <div class="outcomes-grid">
+            <div class="outcome-card">
+              <div class="outcome-value" style="color:var(--clr-primary);">54</div>
+              <div class="outcome-label">Sent</div>
+              <div class="outcome-pct info">100%</div>
+            </div>
+            <div class="outcome-card">
+              <div class="outcome-value" style="color:var(--clr-primary);">51</div>
+              <div class="outcome-label">Delivered</div>
+              <div class="outcome-pct info">94.4%</div>
+            </div>
+            <div class="outcome-card">
+              <div class="outcome-value" style="color:var(--clr-accent);">38</div>
+              <div class="outcome-label">Read</div>
+              <div class="outcome-pct info">74.5%</div>
+            </div>
+            <div class="outcome-card">
+              <div class="outcome-value" style="color:var(--clr-purple);">12</div>
+              <div class="outcome-label">Replied</div>
+              <div class="outcome-pct warn">31.6%</div>
+            </div>
+            <div class="outcome-card">
+              <div class="outcome-value" style="color:var(--clr-success);">8</div>
+              <div class="outcome-label">Positive</div>
+              <div class="outcome-pct good">66.7% of replies</div>
+            </div>
+            <div class="outcome-card">
+              <div class="outcome-value" style="color:var(--clr-danger);">2</div>
+              <div class="outcome-label">Negative</div>
+              <div class="outcome-pct" style="color:var(--clr-danger);">16.7% of replies</div>
+            </div>
+            <div class="outcome-card">
+              <div class="outcome-value" style="color:var(--clr-warning);">2</div>
+              <div class="outcome-label">Pending</div>
+              <div class="outcome-pct warn">16.7% of replies</div>
+            </div>
+            <div class="outcome-card" style="background:var(--clr-success-light);border-color:var(--clr-success);">
+              <div class="outcome-value" style="color:var(--clr-success);">14.8%</div>
+              <div class="outcome-label" style="color:#027948;">Reply Rate</div>
+              <div class="outcome-pct good"><i class="bi bi-arrow-up"></i> +3.2% vs prior</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Section 4: Demo & Deployment Metrics ── -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <div class="chart-card-title"><i class="bi bi-cloud-upload" style="color:var(--clr-primary);margin-right:6px;"></i>Demo & Deployment Metrics</div>
+              <div class="chart-card-sub">Demo generation pipeline and time-to-stage averages</div>
+            </div>
+            <a href="../deployments/index.html" class="btn btn-secondary btn-sm">View Deployments <i class="bi bi-arrow-right"></i></a>
+          </div>
+          <div class="demo-grid">
+            <!-- Stat cards -->
+            <div>
+              <div class="demo-stat-row">
+                <div class="demo-stat">
+                  <div class="demo-stat-value" style="color:var(--clr-primary);">43</div>
+                  <div class="demo-stat-label">Generated</div>
+                </div>
+                <div class="demo-stat">
+                  <div class="demo-stat-value" style="color:var(--clr-accent);">38</div>
+                  <div class="demo-stat-label">Reviewed</div>
+                </div>
+                <div class="demo-stat">
+                  <div class="demo-stat-value" style="color:var(--clr-success);">31</div>
+                  <div class="demo-stat-label">Approved</div>
+                </div>
+                <div class="demo-stat">
+                  <div class="demo-stat-value" style="color:var(--clr-purple);">23</div>
+                  <div class="demo-stat-label">Deployed</div>
+                </div>
+              </div>
+              <div class="chart-wrap" style="height:180px;">
+                <canvas id="demoFunnelChart"></canvas>
+              </div>
+            </div>
+            <!-- Time-to-stage averages table -->
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--clr-heading);margin-bottom:var(--sp-3);">Time-to-Stage Averages</div>
+              <table class="data-table" style="font-size:13px;">
+                <thead>
+                  <tr>
+                    <th>Stage Transition</th>
+                    <th>Avg Time</th>
+                    <th>Trend</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Lead → Verified</td>
+                    <td><strong>4.2 hrs</strong></td>
+                    <td><span style="color:var(--clr-success);font-size:12px;"><i class="bi bi-arrow-down"></i> -1.1 hrs</span></td>
+                  </tr>
+                  <tr>
+                    <td>Verified → Qualified</td>
+                    <td><strong>18.6 hrs</strong></td>
+                    <td><span style="color:var(--clr-success);font-size:12px;"><i class="bi bi-arrow-down"></i> -3.2 hrs</span></td>
+                  </tr>
+                  <tr>
+                    <td>Qualified → Draft</td>
+                    <td><strong>2.1 hrs</strong></td>
+                    <td><span style="color:var(--clr-success);font-size:12px;"><i class="bi bi-arrow-down"></i> -0.4 hrs</span></td>
+                  </tr>
+                  <tr>
+                    <td>Draft → Approved</td>
+                    <td><strong>7.8 hrs</strong></td>
+                    <td><span style="color:var(--clr-warning);font-size:12px;"><i class="bi bi-arrow-up"></i> +1.2 hrs</span></td>
+                  </tr>
+                  <tr>
+                    <td>Approved → Sent</td>
+                    <td><strong>0.5 hrs</strong></td>
+                    <td><span style="color:var(--clr-success);font-size:12px;"><i class="bi bi-arrow-down"></i> -0.1 hrs</span></td>
+                  </tr>
+                  <tr>
+                    <td>Sent → Demo</td>
+                    <td><strong>36.4 hrs</strong></td>
+                    <td><span style="color:var(--clr-success);font-size:12px;"><i class="bi bi-arrow-down"></i> -8.5 hrs</span></td>
+                  </tr>
+                  <tr>
+                    <td>Demo → Deployed</td>
+                    <td><strong>14.2 hrs</strong></td>
+                    <td><span style="color:var(--clr-success);font-size:12px;"><i class="bi bi-arrow-down"></i> -2.1 hrs</span></td>
+                  </tr>
+                  <tr style="background:var(--clr-primary-light);">
+                    <td><strong style="color:var(--clr-primary);">Total (Lead → Deployed)</strong></td>
+                    <td><strong style="color:var(--clr-primary);">83.8 hrs</strong></td>
+                    <td><span style="color:var(--clr-success);font-size:12px;"><i class="bi bi-arrow-down"></i> -14.2 hrs</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end analytics-grid -->
+    </main>
+  </div><!-- end main-wrapper -->
+</div><!-- end app-shell -->
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../js/analytics.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  // Date range filter
+  function setRange(btn, range) {
+    document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const customEl = document.getElementById('custom-range');
+    customEl.style.display = range === 'custom' ? 'flex' : 'none';
+  }
+
+  // Export stub
+  function exportCSV() {
+    showToast({ title: 'Export Started', message: 'Your CSV is being prepared and will download shortly.', type: 'success' });
+  }
+</script>
+</body>
+</html>

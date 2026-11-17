@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover Leads | ACAA — AI Client Acquisition Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    /* Discover leads page specific styles */
+    .discovery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-5);
+    }
+    .estimate-callout {
+      background: linear-gradient(135deg, #EFF6FF 0%, #ECFEFF 100%);
+      border: 1px solid #BFDBFE;
+      border-radius: var(--radius-lg);
+      padding: var(--sp-4) var(--sp-5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--sp-5);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .drag-drop-zone {
+      border: 2px dashed var(--clr-border);
+      border-radius: var(--radius-xl);
+      padding: var(--sp-10) var(--sp-6);
+      text-align: center;
+      background: var(--clr-bg);
+      cursor: pointer;
+      transition: border-color var(--tr-fast), background-color var(--tr-fast);
+    }
+    .drag-drop-zone:hover, .drag-drop-zone.dragover {
+      border-color: var(--clr-primary);
+      background: #EFF6FF;
+    }
+    .mapping-table th {
+      background: #F8FAFC;
+      font-size: 11.5px;
+      padding: 10px 14px;
+      color: var(--clr-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .mapping-table td {
+      padding: 10px 14px;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--clr-border);
+      font-size: 13px;
+    }
+    .progress-pulse {
+      animation: pulse 1.5s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <a href="../dashboard.html" class="sidebar-brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <div class="brand-name">ACAA</div>
+          <div class="brand-sub">AI Client Acquisition</div>
+        </div>
+      </a>
+
+      <div class="sidebar-nav">
+        <!-- Group: Main -->
+        <div class="nav-group">
+          <div class="nav-group-label">Main</div>
+          <a href="../dashboard.html" class="nav-item">
+            <i class="bi bi-grid-1x2"></i>
+            <span class="nav-item-label">Overview</span>
+          </a>
+        </div>
+
+        <!-- Group: Leads -->
+        <div class="nav-group">
+          <div class="nav-group-label">Leads</div>
+          <a href="../leads/discover.html" class="nav-item active">
+            <i class="bi bi-search"></i>
+            <span class="nav-item-label">Lead Discovery</span>
+          </a>
+          <a href="../leads/index.html" class="nav-item">
+            <i class="bi bi-people"></i>
+            <span class="nav-item-label">All Leads</span>
+          </a>
+          <a href="../verification/index.html" class="nav-item">
+            <i class="bi bi-shield-check"></i>
+            <span class="nav-item-label">Verification Queue</span>
+            <span class="nav-badge">7</span>
+          </a>
+        </div>
+
+        <!-- Group: Outreach -->
+        <div class="nav-group">
+          <div class="nav-group-label">Outreach</div>
+          <a href="../outreach/editor.html" class="nav-item">
+            <i class="bi bi-robot"></i>
+            <span class="nav-item-label">AI Outreach</span>
+          </a>
+          <a href="../approvals/index.html" class="nav-item">
+            <i class="bi bi-check2-square"></i>
+            <span class="nav-item-label">Approval Center</span>
+            <span class="nav-badge">4</span>
+          </a>
+          <a href="../whatsapp/details.html" class="nav-item">
+            <i class="bi bi-whatsapp"></i>
+            <span class="nav-item-label">WhatsApp Tracking</span>
+          </a>
+        </div>
+
+        <!-- Group: Demo -->
+        <div class="nav-group">
+          <div class="nav-group-label">Demo</div>
+          <a href="../demos/index.html" class="nav-item">
+            <i class="bi bi-laptop"></i>
+            <span class="nav-item-label">Demo Studio</span>
+          </a>
+          <a href="../deployments/index.html" class="nav-item">
+            <i class="bi bi-cloud-upload"></i>
+            <span class="nav-item-label">Deployments</span>
+          </a>
+        </div>
+
+        <!-- Group: Reports -->
+        <div class="nav-group">
+          <div class="nav-group-label">Reports</div>
+          <a href="../analytics/index.html" class="nav-item">
+            <i class="bi bi-bar-chart-line"></i>
+            <span class="nav-item-label">Analytics</span>
+          </a>
+        </div>
+
+        <!-- Group: Admin -->
+        <div class="nav-group">
+          <div class="nav-group-label">Admin</div>
+          <a href="../integrations/index.html" class="nav-item">
+            <i class="bi bi-plug"></i>
+            <span class="nav-item-label">Integrations</span>
+          </a>
+          <a href="../team/index.html" class="nav-item">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-item-label">Team &amp; Roles</span>
+          </a>
+          <a href="../audit/index.html" class="nav-item">
+            <i class="bi bi-journal-text"></i>
+            <span class="nav-item-label">Audit Log</span>
+          </a>
+          <a href="../settings/index.html" class="nav-item">
+            <i class="bi bi-gear"></i>
+            <span class="nav-item-label">Settings</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">AD</div>
+          <div class="user-info">
+            <div class="user-name">Alex Drake</div>
+            <div class="user-role">Operations Lead</div>
+          </div>
+        </div>
+        <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Toggle sidebar">
+          <i class="bi bi-layout-sidebar"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open sidebar">
+          <i class="bi bi-list"></i>
+        </button>
+
+        <div class="topbar-breadcrumb">
+          <a href="../dashboard.html">Home</a>
+          <span class="sep">/</span>
+          <span class="current">Discover Leads</span>
+        </div>
+
+        <div class="topbar-search">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" id="global-search" placeholder="Search leads, companies..." autocomplete="off">
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" id="notif-btn" title="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="notif-dot"></span>
+          </button>
+          <a href="../settings/index.html" class="icon-btn" title="Settings">
+            <i class="bi bi-gear"></i>
+          </a>
+          <div class="topbar-avatar" title="Alex Drake">AD</div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Discover Leads</h1>
+            <p class="page-subtitle">Find and import potential business clients</p>
+          </div>
+          <div class="page-actions">
+            <a href="index.html" class="btn btn-secondary">
+              <i class="bi bi-people"></i> View All Leads (1,284)
+            </a>
+          </div>
+        </div>
+
+        <!-- Active Discovery Job Progress Section (Collapsible/Conditional) -->
+        <div id="active-job-card" class="card mb-6" style="border-left: 4px solid var(--clr-primary); background: #FFFFFF; display: block;">
+          <div class="flex items-center justify-between mb-3" style="flex-wrap:wrap;gap:8px;">
+            <div class="flex items-center gap-3">
+              <div class="job-icon" style="background:var(--clr-primary-light);color:var(--clr-primary);">
+                <i class="bi bi-radar progress-pulse"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-sm">Active Job #DISC-1053: Dubai E-commerce Discovery</span>
+                  <span class="badge badge-processing">Running</span>
+                </div>
+                <div class="text-xs text-muted mt-1">
+                  Stage 3 of 4: Enriching contact validity &amp; executive profiles
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <span class="font-bold text-sm" id="job-count-indicator">96 / 142 Discovered</span>
+                <div class="text-xs text-muted">Elapsed: 01m 24s</div>
+              </div>
+              <button class="btn btn-sm btn-secondary" onclick="cancelActiveJob()">
+                <i class="bi bi-x-circle"></i> Cancel Job
+              </button>
+            </div>
+          </div>
+
+          <div class="job-progress-bar" style="height:6px;">
+            <div class="job-progress-fill" id="active-progress-fill" style="width: 68%;"></div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-muted mt-2">
+            <span>Query: Google Places API · Location: Dubai, UAE · Category: E-commerce</span>
+            <span class="text-primary font-medium">68% completed</span>
+          </div>
+        </div>
+
+        <!-- Three-Tab Layout -->
+        <div data-tab-group="discovery-tabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="tab-search" id="btn-tab-search">
+              <i class="bi bi-funnel"></i> Search &amp; Filter
+            </button>
+            <button class="tab-btn" data-tab="tab-manual" id="btn-tab-manual">
+              <i class="bi bi-pencil-square"></i> Manual Entry
+            </button>
+            <button class="tab-btn" data-tab="tab-csv" id="btn-tab-csv">
+              <i class="bi bi-file-earmark-spreadsheet"></i> CSV Import
+            </button>
+          </div>
+
+          <!-- TAB 1: Search & Filter -->
+          <div class="tab-panel active" id="tab-search">
+            <div class="card mb-6">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title"><i class="bi bi-globe-americas text-primary"></i> Automated Discovery Query Builder</h2>
+                  <p class="text-xs text-muted mt-1">Configure criteria to ingest prospective clients from global directory and social APIs.</p>
+                </div>
+                <span class="badge badge-ai"><i class="bi bi-robot"></i> Multi-Source Crawler</span>
+              </div>
+
+              <form id="discovery-search-form" onsubmit="handleDiscoveryStart(event)">
+                <div class="discovery-grid">
+                  <!-- Industry Select -->
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="disc-industry">Industry <span class="req">*</span></label>
+                    <select id="disc-industry" class="form-control form-select" onchange="updateEstimatedCount()">
+                      <option value="E-commerce" selected>E-commerce &amp; Direct-to-Consumer</option>
+                      <option value="Healthcare">Healthcare &amp; Private Clinics</option>
+                      <option value="Real Estate">Real Estate &amp; PropTech</option>
+                      <option value="Finance">Financial Services &amp; Wealth</option>
+                      <option value="Technology">Technology &amp; B2B SaaS</option>
+                      <option value="Retail">Retail &amp; Luxury Goods</option>
+                      <option value="Professional Services">Consulting &amp; Legal</option>
+                      <option value="Education">Education &amp; EdTech</option>
+                    </select>
+                  </div>
+
+                  <!-- Business Category Text -->
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="disc-category">Business Category Keywords</label>
+                    <input type="text" id="disc-category" class="form-control" value="Shopify, Headless Commerce, Apparel" placeholder="e.g. Luxury Fashion, Electronics, Logistics" oninput="updateEstimatedCount()">
+                  </div>
+
+                  <!-- City/Country Text -->
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="disc-location">City / Country <span class="req">*</span></label>
+                    <input type="text" id="disc-location" class="form-control" value="Dubai, United Arab Emirates" placeholder="e.g. Dubai, London, New York" oninput="updateEstimatedCount()" required>
+                  </div>
+
+                  <!-- Website Presence Dropdown -->
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="disc-website">Website Presence</label>
+                    <select id="disc-website" class="form-control form-select" onchange="updateEstimatedCount()">
+                      <option value="has-website" selected>Has Active Website Only</option>
+                      <option value="any">Any (Include Unregistered)</option>
+                      <option value="no-website">Missing Website (Web Build Opportunity)</option>
+                    </select>
+                  </div>
+
+                  <!-- Source Dropdown -->
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="disc-source">Primary Data Source <span class="req">*</span></label>
+                    <select id="disc-source" class="form-control form-select" onchange="updateEstimatedCount()">
+                      <option value="Google Places" selected>Google Places API (High Precision)</option>
+                      <option value="LinkedIn">LinkedIn Sales Navigator</option>
+                      <option value="Yelp">Yelp Business Directory</option>
+                      <option value="Manual">Manual Web Crawler / Direct Site List</option>
+                    </select>
+                  </div>
+
+                  <!-- Date Range -->
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="disc-date">Listing Recency</label>
+                    <select id="disc-date" class="form-control form-select">
+                      <option value="all">Any Active Business</option>
+                      <option value="7d">Added / Reviewed in Last 7 Days</option>
+                      <option value="30d">Added / Reviewed in Last 30 Days</option>
+                      <option value="90d">Added / Reviewed in Last 90 Days</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Estimated Results Banner -->
+                <div class="estimate-callout">
+                  <div class="flex items-center gap-3">
+                    <div style="width:40px;height:40px;border-radius:var(--radius-md);background:#FFFFFF;color:var(--clr-primary);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:var(--shadow-xs);">
+                      <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <div>
+                      <div class="font-bold text-sm" id="estimate-title" style="color:var(--clr-heading);">
+                        Estimated ~142 qualifying businesses found
+                      </div>
+                      <div class="text-xs text-muted" id="estimate-subtitle">
+                        Matches: Industry (E-commerce), City (Dubai), Active SSL websites, Google Places rating &ge; 4.0
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button type="button" class="btn btn-secondary" onclick="previewSampleResults()">
+                      <i class="bi bi-eye"></i> Preview Sample (5)
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="start-job-btn">
+                      <i class="bi bi-play-circle-fill"></i> Start Discovery Job
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <!-- Dynamic Sample Preview Area (Collapsible) -->
+              <div id="preview-results-container" style="display:none;margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--clr-border);">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="label text-primary"><i class="bi bi-binoculars"></i> Live Sample Preview (Top 5 Matching Records)</span>
+                  <button class="btn btn-sm btn-ghost" onclick="document.getElementById('preview-results-container').style.display='none';"><i class="bi bi-x-lg"></i> Close Preview</button>
+                </div>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Business</th>
+                        <th>Location</th>
+                        <th>Category</th>
+                        <th>Rating</th>
+                        <th>Estimated Score</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#EFF6FF;color:#2563EB;">TS</div>
+                            <div>
+                              <div class="biz-name">TechBuild Solutions</div>
+                              <div class="biz-domain">techbuild.io</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Dubai Internet City</td>
+                        <td>E-commerce</td>
+                        <td>4.8★ (42 reviews)</td>
+                        <td><span class="score-badge score-high">87</span></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#ECFEFF;color:#0E7490;">BM</div>
+                            <div>
+                              <div class="biz-name">BluePeak Marketing</div>
+                              <div class="biz-domain">bluepeak.agency</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Downtown Dubai</td>
+                        <td>Marketing</td>
+                        <td>4.9★ (65 reviews)</td>
+                        <td><span class="score-badge score-high">88</span></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#EFF6FF;color:#2563EB;">AF</div>
+                            <div>
+                              <div class="biz-name">Apex Financial</div>
+                              <div class="biz-domain">apexfin.com</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>DIFC, Dubai</td>
+                        <td>Finance</td>
+                        <td>4.7★ (31 reviews)</td>
+                        <td><span class="score-badge score-high">83</span></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#FEF3F2;color:#B42318;">MD</div>
+                            <div>
+                              <div class="biz-name">Metro Digital Agency</div>
+                              <div class="biz-domain">metrodigital.ae</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Business Bay, Dubai</td>
+                        <td>Marketing</td>
+                        <td>4.5★ (18 reviews)</td>
+                        <td><span class="score-badge score-medium">72</span></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="biz-cell">
+                            <div class="biz-avatar" style="background:#F5F3FF;color:#6D28D9;">MR</div>
+                            <div>
+                              <div class="biz-name">Meridian Luxury Retail</div>
+                              <div class="biz-domain">meridian-luxury.com</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Dubai Marina</td>
+                        <td>Retail</td>
+                        <td>4.6★ (28 reviews)</td>
+                        <td><span class="score-badge score-medium">74</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Manual Entry -->
+          <div class="tab-panel" id="tab-manual">
+            <div class="card mb-6">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title"><i class="bi bi-pencil-square text-accent"></i> Single Business Manual Onboarding</h2>
+                  <p class="text-xs text-muted mt-1">Directly add an individual target company to bypass API discovery.</p>
+                </div>
+                <span class="badge badge-verified">Direct Pipeline Entry</span>
+              </div>
+
+              <form id="manual-lead-form" onsubmit="handleManualSubmit(event)">
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="man-name">Company Name <span class="req">*</span></label>
+                    <input type="text" id="man-name" class="form-control" placeholder="e.g. Apex Dynamics Ltd" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="man-domain">Website URL <span class="req">*</span></label>
+                    <input type="url" id="man-domain" class="form-control" placeholder="https://apexdynamics.com" required>
+                  </div>
+                </div>
+
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="man-industry">Industry <span class="req">*</span></label>
+                    <select id="man-industry" class="form-control form-select" required>
+                      <option value="">Select industry</option>
+                      <option value="E-commerce">E-commerce</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Real Estate">Real Estate</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Tech">Technology &amp; SaaS</option>
+                      <option value="Marketing">Marketing Agency</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="man-city">City <span class="req">*</span></label>
+                    <input type="text" id="man-city" class="form-control" placeholder="e.g. Dubai" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="man-country">Country <span class="req">*</span></label>
+                    <input type="text" id="man-country" class="form-control" placeholder="e.g. UAE" required>
+                  </div>
+                </div>
+
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="man-contact-name">Primary Contact Name</label>
+                    <input type="text" id="man-contact-name" class="form-control" placeholder="e.g. Omar Khalid">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="man-contact-role">Contact Job Title</label>
+                    <input type="text" id="man-contact-role" class="form-control" placeholder="e.g. Chief Operating Officer">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="man-contact-email">Contact Corporate Email</label>
+                    <input type="email" id="man-contact-email" class="form-control" placeholder="e.g. omar@apexdynamics.com">
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="man-contact-phone">Phone Number (with Country Code)</label>
+                    <input type="tel" id="man-contact-phone" class="form-control" placeholder="e.g. +971 50 123 4567">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="man-linkedin">LinkedIn Company / Executive Profile</label>
+                    <input type="url" id="man-linkedin" class="form-control" placeholder="https://linkedin.com/company/apex-dynamics">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="man-notes">Internal Context &amp; Discovery Notes</label>
+                  <textarea id="man-notes" class="form-control" rows="3" placeholder="Add specific pain points or referral context..."></textarea>
+                </div>
+
+                <div class="flex items-center justify-between" style="border-top:1px solid var(--clr-border);padding-top:var(--sp-4);">
+                  <div class="text-xs text-muted">
+                    <i class="bi bi-shield-check"></i> Lead will be automatically checked for duplicates and DNS validity.
+                  </div>
+                  <div class="flex gap-2">
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-plus-circle"></i> Add Lead to Pipeline
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB 3: CSV Import -->
+          <div class="tab-panel" id="tab-csv">
+            <div class="card mb-6">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title"><i class="bi bi-file-earmark-spreadsheet text-success"></i> Batch CSV Lead Ingestion</h2>
+                  <p class="text-xs text-muted mt-1">Upload large prospect files and map columns to ACAA pipeline properties.</p>
+                </div>
+                <span class="badge" style="background:#F1F5F9;color:#334155;">Max: 10,000 rows</span>
+              </div>
+
+              <!-- Drag and Drop Zone -->
+              <div class="drag-drop-zone mb-5" id="csv-drop-zone" onclick="document.getElementById('csv-file-input').click()">
+                <input type="file" id="csv-file-input" accept=".csv,.xlsx" style="display:none;" onchange="handleFileSelect(event)">
+                <div style="width:60px;height:60px;border-radius:var(--radius-full);background:var(--clr-primary-light);color:var(--clr-primary);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto var(--sp-4);">
+                  <i class="bi bi-cloud-arrow-up"></i>
+                </div>
+                <h3 style="font-size:16px;font-weight:700;color:var(--clr-heading);margin-bottom:6px;">
+                  Drag &amp; drop your CSV or Excel file here
+                </h3>
+                <p class="text-sm text-muted mb-4">
+                  Supports .csv and .xlsx formats with standard header rows. File size limit: 15MB.
+                </p>
+                <button type="button" class="btn btn-secondary">
+                  <i class="bi bi-folder2-open"></i> Browse Files on Computer
+                </button>
+              </div>
+
+              <!-- Uploaded File Badge & Mapping UI -->
+              <div id="mapping-container" style="display:block;">
+                <div class="flex items-center justify-between mb-4 p-4" style="background:#F8FAFC;border:1px solid var(--clr-border);border-radius:var(--radius-md);">
+                  <div class="flex items-center gap-3">
+                    <i class="bi bi-filetype-csv text-success" style="font-size:28px;"></i>
+                    <div>
+                      <div class="font-semibold text-sm">dubai_ecommerce_merchants_nov.csv</div>
+                      <div class="text-xs text-muted">1.2 MB · 250 Total Rows Detected · Auto-Header Recognition: Active</div>
+                    </div>
+                  </div>
+                  <span class="badge badge-verified">Ready to Map</span>
+                </div>
+
+                <!-- Column Mapping Table -->
+                <div class="table-container mb-5">
+                  <table class="data-table mapping-table">
+                    <thead>
+                      <tr>
+                        <th>CSV Header Name</th>
+                        <th>Sample Data Value (Row 1)</th>
+                        <th>Destination CRM Field</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>company_name</strong></td>
+                        <td class="text-muted">TechBuild Solutions</td>
+                        <td>
+                          <select class="form-control form-select" style="padding:6px 12px;font-size:13px;">
+                            <option value="name" selected>Business Name (Required)</option>
+                            <option value="domain">Website URL</option>
+                            <option value="category">Category</option>
+                            <option value="city">City</option>
+                          </select>
+                        </td>
+                        <td><span class="badge badge-verified"><i class="bi bi-check-lg"></i> Matched</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>site_url</strong></td>
+                        <td class="text-muted">https://techbuild.io</td>
+                        <td>
+                          <select class="form-control form-select" style="padding:6px 12px;font-size:13px;">
+                            <option value="domain" selected>Website URL (Required)</option>
+                            <option value="name">Business Name</option>
+                            <option value="category">Category</option>
+                          </select>
+                        </td>
+                        <td><span class="badge badge-verified"><i class="bi bi-check-lg"></i> Matched</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>sector</strong></td>
+                        <td class="text-muted">E-commerce</td>
+                        <td>
+                          <select class="form-control form-select" style="padding:6px 12px;font-size:13px;">
+                            <option value="category" selected>Industry Category</option>
+                            <option value="name">Business Name</option>
+                          </select>
+                        </td>
+                        <td><span class="badge badge-verified"><i class="bi bi-check-lg"></i> Matched</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>location_city</strong></td>
+                        <td class="text-muted">Dubai</td>
+                        <td>
+                          <select class="form-control form-select" style="padding:6px 12px;font-size:13px;">
+                            <option value="city" selected>City</option>
+                            <option value="country">Country</option>
+                          </select>
+                        </td>
+                        <td><span class="badge badge-verified"><i class="bi bi-check-lg"></i> Matched</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>founder_email</strong></td>
+                        <td class="text-muted">t.mansoor@techbuild.io</td>
+                        <td>
+                          <select class="form-control form-select" style="padding:6px 12px;font-size:13px;">
+                            <option value="email" selected>Primary Contact Email</option>
+                            <option value="phone">Phone Number</option>
+                          </select>
+                        </td>
+                        <td><span class="badge badge-verified"><i class="bi bi-check-lg"></i> Matched</span></td>
+                      </tr>
+                      <tr>
+                        <td><strong>phone_no</strong></td>
+                        <td class="text-muted">+971 50 341 4821</td>
+                        <td>
+                          <select class="form-control form-select" style="padding:6px 12px;font-size:13px;">
+                            <option value="phone" selected>Phone Number</option>
+                            <option value="email">Email</option>
+                          </select>
+                        </td>
+                        <td><span class="badge badge-verified"><i class="bi bi-check-lg"></i> Matched</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Validation Results Panel -->
+                <div class="card card-sm mb-4" style="background:#F8FAFC;border:1px solid var(--clr-border);">
+                  <div class="card-header" style="margin-bottom:var(--sp-2);">
+                    <span class="font-semibold text-sm">Validation Health Check</span>
+                    <span class="badge badge-qualified">Ready for Import</span>
+                  </div>
+                  <div class="grid-4 text-center" style="gap:12px;">
+                    <div style="background:#FFFFFF;border:1px solid var(--clr-border);border-radius:var(--radius-sm);padding:10px;">
+                      <div class="font-bold text-lg" style="color:var(--clr-heading);">250</div>
+                      <div class="text-xs text-muted">Total Rows</div>
+                    </div>
+                    <div style="background:#FFFFFF;border:1px solid var(--clr-border);border-radius:var(--radius-sm);padding:10px;">
+                      <div class="font-bold text-lg text-success">242</div>
+                      <div class="text-xs text-muted">Valid Records</div>
+                    </div>
+                    <div style="background:#FFFFFF;border:1px solid var(--clr-border);border-radius:var(--radius-sm);padding:10px;">
+                      <div class="font-bold text-lg text-warning">8</div>
+                      <div class="text-xs text-muted">Missing Fields (Auto-Enrich)</div>
+                    </div>
+                    <div style="background:#FFFFFF;border:1px solid var(--clr-border);border-radius:var(--radius-sm);padding:10px;">
+                      <div class="font-bold text-lg text-primary">0</div>
+                      <div class="text-xs text-muted">Duplicates (Filtered)</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-muted">Upon import, automated verification and AI scoring pipelines will trigger immediately.</span>
+                  <button class="btn btn-primary" onclick="executeCsvImport()">
+                    <i class="bi bi-file-earmark-check"></i> Execute Import of 242 Leads
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Discovery Jobs Section -->
+        <div class="card mt-6">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title"><i class="bi bi-clock-history"></i> Recent Discovery Jobs</h2>
+              <p class="text-xs text-muted mt-1">Audit trail and history of past automated lead generation queries.</p>
+            </div>
+            <span class="text-xs text-muted">5 past jobs logged</span>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Job ID</th>
+                  <th>Target Query &amp; Criteria</th>
+                  <th>Source</th>
+                  <th>Found</th>
+                  <th>Imported</th>
+                  <th>Status</th>
+                  <th>Run Date</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Job 1 -->
+                <tr>
+                  <td><strong>#DISC-1052</strong></td>
+                  <td>
+                    <div class="font-semibold">E-commerce Brands &amp; Stores</div>
+                    <div class="text-xs text-muted">City: Dubai, UAE · Has Website</div>
+                  </td>
+                  <td><span class="badge" style="background:#EFF6FF;color:#2563EB;">Google Places</span></td>
+                  <td>142 leads</td>
+                  <td>138 verified</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td class="muted">Today, 11:20 AM</td>
+                  <td style="text-align:right;">
+                    <a href="index.html?job=1052" class="btn btn-sm btn-secondary">View Leads</a>
+                  </td>
+                </tr>
+
+                <!-- Job 2 -->
+                <tr>
+                  <td><strong>#DISC-1051</strong></td>
+                  <td>
+                    <div class="font-semibold">Commercial Real Estate Agencies</div>
+                    <div class="text-xs text-muted">City: London, UK · Key Executives</div>
+                  </td>
+                  <td><span class="badge" style="background:#EFF6FF;color:#1D4ED8;">LinkedIn</span></td>
+                  <td>85 leads</td>
+                  <td>81 verified</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td class="muted">Yesterday, 03:45 PM</td>
+                  <td style="text-align:right;">
+                    <a href="index.html?job=1051" class="btn btn-sm btn-secondary">View Leads</a>
+                  </td>
+                </tr>
+
+                <!-- Job 3 -->
+                <tr>
+                  <td><strong>#DISC-1050</strong></td>
+                  <td>
+                    <div class="font-semibold">Private Healthcare Clinics</div>
+                    <div class="text-xs text-muted">City: New York, USA · Rating &ge; 4.0</div>
+                  </td>
+                  <td><span class="badge" style="background:#FEF3F2;color:#B42318;">Yelp</span></td>
+                  <td>110 leads</td>
+                  <td>94 verified</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td class="muted">Nov 15, 2026</td>
+                  <td style="text-align:right;">
+                    <a href="index.html?job=1050" class="btn btn-sm btn-secondary">View Leads</a>
+                  </td>
+                </tr>
+
+                <!-- Job 4 -->
+                <tr>
+                  <td><strong>#DISC-1049</strong></td>
+                  <td>
+                    <div class="font-semibold">Enterprise Tech Agencies</div>
+                    <div class="text-xs text-muted">City: Singapore · Shopify &amp; React</div>
+                  </td>
+                  <td><span class="badge" style="background:#EFF6FF;color:#2563EB;">Google Places</span></td>
+                  <td>64 leads</td>
+                  <td>64 verified</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td class="muted">Nov 14, 2026</td>
+                  <td style="text-align:right;">
+                    <a href="index.html?job=1049" class="btn btn-sm btn-secondary">View Leads</a>
+                  </td>
+                </tr>
+
+                <!-- Job 5 -->
+                <tr>
+                  <td><strong>#DISC-1048</strong></td>
+                  <td>
+                    <div class="font-semibold">Boutique Retail Chains</div>
+                    <div class="text-xs text-muted">City: Sydney, Australia · Direct Crawler</div>
+                  </td>
+                  <td><span class="badge" style="background:#F1F5F9;color:#334155;">Web Crawler</span></td>
+                  <td>22 leads</td>
+                  <td>0 imported</td>
+                  <td><span class="badge badge-failed">Failed (Timeout)</span></td>
+                  <td class="muted">Nov 13, 2026</td>
+                  <td style="text-align:right;">
+                    <button class="btn btn-sm btn-secondary" onclick="retryJob('DISC-1048')">Retry Job</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Confirmation Modal: Start Discovery Job -->
+  <div class="modal-backdrop" id="confirm-discovery-modal" style="display:none;">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirm Discovery Execution</h2>
+        <button class="modal-close" data-modal-close="confirm-discovery-modal"><i class="bi bi-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-icon" style="background:#EFF6FF;color:#2563EB;margin:0 auto var(--sp-4);">
+          <i class="bi bi-radar"></i>
+        </div>
+        <h3 class="modal-title text-center mb-3" style="font-size:16px;">Launch Autonomous Discovery Job?</h3>
+        
+        <div style="background:#F8FAFC;border:1px solid var(--clr-border);border-radius:var(--radius-md);padding:14px;margin-bottom:var(--sp-4);font-size:13px;line-height:1.6;">
+          <div class="flex justify-between mb-1">
+            <span class="text-muted">Target Industry:</span>
+            <strong id="modal-summary-industry">E-commerce</strong>
+          </div>
+          <div class="flex justify-between mb-1">
+            <span class="text-muted">Target Location:</span>
+            <strong id="modal-summary-location">Dubai, UAE</strong>
+          </div>
+          <div class="flex justify-between mb-1">
+            <span class="text-muted">Data Provider:</span>
+            <strong id="modal-summary-source">Google Places API</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted">Estimated Target Leads:</span>
+            <strong class="text-primary" id="modal-summary-count">~142 leads</strong>
+          </div>
+        </div>
+
+        <div class="ai-warning mb-4">
+          <i class="bi bi-exclamation-triangle-fill" style="margin-top:2px;"></i>
+          <div>
+            <strong>Credit Usage Notice:</strong> This operation will consume approx. <strong>142 Google Places API credits</strong> and <strong>142 AI verification credits</strong> from your monthly workspace quota.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-modal-close="confirm-discovery-modal">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmLaunchJob()">
+          <i class="bi bi-play-fill"></i> Confirm &amp; Launch Job
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/app.js"></script>
+  <script>
+    // Tab switching is natively handled by app.js with data-tab-group="discovery-tabs"
+
+    // Parse URL parameter to automatically switch to CSV tab if requested (?tab=csv)
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam === 'csv') {
+        const btnCsv = document.getElementById('btn-tab-csv');
+        if (btnCsv) btnCsv.click();
+      } else if (tabParam === 'manual') {
+        const btnManual = document.getElementById('btn-tab-manual');
+        if (btnManual) btnManual.click();
+      }
+    });
+
+    // Dynamic count update in Search tab
+    function updateEstimatedCount() {
+      const industry = document.getElementById('disc-industry')?.value || 'E-commerce';
+      const location = (document.getElementById('disc-location')?.value || '').trim();
+      const source = document.getElementById('disc-source')?.value || 'Google Places';
+      
+      let baseCount = 142;
+      if (industry === 'Healthcare') baseCount = 88;
+      if (industry === 'Real Estate') baseCount = 115;
+      if (industry === 'Finance') baseCount = 64;
+      if (industry === 'Technology') baseCount = 92;
+
+      if (!location) baseCount = 0;
+
+      const titleEl = document.getElementById('estimate-title');
+      const subtitleEl = document.getElementById('estimate-subtitle');
+      if (titleEl) {
+        titleEl.textContent = `Estimated ~${baseCount} qualifying businesses found`;
+      }
+      if (subtitleEl) {
+        subtitleEl.textContent = `Matches: Industry (${industry}), Location (${location || 'Global'}), Source (${source})`;
+      }
+    }
+
+    function previewSampleResults() {
+      const container = document.getElementById('preview-results-container');
+      if (container) {
+        container.style.display = 'block';
+        container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      if (window.showToast) {
+        showToast({ title: 'Sample Generated', message: 'Loaded 5 sample leads matching your criteria.', type: 'default' });
+      }
+    }
+
+    function handleDiscoveryStart(event) {
+      event.preventDefault();
+      // Populate modal summary
+      const ind = document.getElementById('disc-industry')?.value || 'E-commerce';
+      const loc = document.getElementById('disc-location')?.value || 'Dubai, UAE';
+      const src = document.getElementById('disc-source')?.value || 'Google Places';
+      
+      document.getElementById('modal-summary-industry').textContent = ind;
+      document.getElementById('modal-summary-location').textContent = loc;
+      document.getElementById('modal-summary-source').textContent = src;
+
+      openModal('confirm-discovery-modal');
+    }
+
+    function confirmLaunchJob() {
+      closeModal('confirm-discovery-modal');
+      const activeCard = document.getElementById('active-job-card');
+      if (activeCard) {
+        activeCard.style.display = 'block';
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Progress bar animation simulation
+      let progress = 10;
+      const progressFill = document.getElementById('active-progress-fill');
+      const countIndicator = document.getElementById('job-count-indicator');
+      
+      const interval = setInterval(() => {
+        progress += 8;
+        if (progress > 98) {
+          clearInterval(interval);
+          progress = 100;
+        }
+        if (progressFill) progressFill.style.width = progress + '%';
+        if (countIndicator) {
+          const count = Math.min(142, Math.floor((progress / 100) * 142));
+          countIndicator.textContent = `${count} / 142 Discovered`;
+        }
+      }, 400);
+
+      if (window.showToast) {
+        showToast({
+          title: 'Discovery Job Launched',
+          message: 'Job #DISC-1053 started across Google Places and directory APIs.',
+          type: 'success'
+        });
+      }
+    }
+
+    function cancelActiveJob() {
+      if (window.confirmAction) {
+        confirmAction({
+          title: 'Cancel Discovery Job #DISC-1053?',
+          message: 'The current crawler job will halt. The 96 businesses already identified will remain saved.',
+          confirmText: 'Cancel Execution',
+          type: 'warning',
+          onConfirm: () => {
+            const activeCard = document.getElementById('active-job-card');
+            if (activeCard) activeCard.style.display = 'none';
+            showToast({ title: 'Job Cancelled', message: 'Crawler halted. 96 leads stored.', type: 'default' });
+          }
+        });
+      }
+    }
+
+    function handleManualSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('man-name')?.value;
+      const domain = document.getElementById('man-domain')?.value;
+      event.target.reset();
+      if (window.showToast) {
+        showToast({
+          title: 'Lead Added to Pipeline',
+          message: `${name} (${domain}) was created and queued for automated scoring.`,
+          type: 'success'
+        });
+      }
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const mappingContainer = document.getElementById('mapping-container');
+        if (mappingContainer) mappingContainer.style.display = 'block';
+        if (window.showToast) {
+          showToast({
+            title: 'File Uploaded',
+            message: `Uploaded ${file.name} (${(file.size / 1024).toFixed(1)} KB). Auto-detected 6 columns.`,
+            type: 'success'
+          });
+        }
+      }
+    }
+
+    function executeCsvImport() {
+      if (window.showToast) {
+        showToast({
+          title: 'Import Executed',
+          message: 'Successfully imported 242 leads into pipeline. Background scoring running.',
+          type: 'success'
+        });
+      }
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
+    }
+
+    function retryJob(jobId) {
+      if (window.showToast) {
+        showToast({
+          title: 'Retrying Job',
+          message: `Restarting crawler query for ${jobId}...`,
+          type: 'default'
+        });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Outreach Workspace — ACAA Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    /* 3-panel workspace layout */
+    .outreach-workspace {
+      display: grid;
+      grid-template-columns: 280px 1fr 320px;
+      gap: var(--sp-5);
+      align-items: start;
+    }
+    @media (max-width: 1280px) {
+      .outreach-workspace {
+        grid-template-columns: 260px 1fr 290px;
+        gap: var(--sp-4);
+      }
+    }
+    @media (max-width: 1024px) {
+      .outreach-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Panel: Lead Selector */
+    .lead-picker-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+      max-height: 280px;
+      overflow-y: auto;
+      margin-bottom: var(--sp-4);
+      padding-right: 2px;
+    }
+    .lead-picker-item {
+      padding: 10px 12px;
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      background: var(--clr-surface);
+      cursor: pointer;
+      transition: all var(--tr-fast);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .lead-picker-item:hover {
+      border-color: var(--clr-primary);
+      background: var(--clr-primary-light);
+    }
+    .lead-picker-item.active {
+      border-color: var(--clr-primary);
+      background: var(--clr-primary-light);
+      box-shadow: 0 0 0 1px var(--clr-primary);
+    }
+    .lead-picker-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .lead-picker-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--clr-heading);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lead-picker-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--clr-muted);
+    }
+
+    /* Selected Lead Summary Card */
+    .selected-lead-summary {
+      background: #F8FAFC;
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      padding: var(--sp-4);
+    }
+    .lead-detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--clr-border);
+    }
+    .lead-detail-row:last-child {
+      border-bottom: none;
+    }
+    .evidence-mini-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      padding: 6px 8px;
+      font-size: 11.5px;
+      color: var(--clr-text);
+      line-height: 1.35;
+      margin-top: 6px;
+    }
+    .evidence-mini-item i {
+      color: var(--clr-accent);
+      font-size: 12px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Center Panel: Editor */
+    .editor-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-6);
+      box-shadow: var(--shadow-xs);
+    }
+    .channel-tabs {
+      display: flex;
+      gap: 6px;
+      background: #F1F5F9;
+      padding: 4px;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--sp-4);
+      width: fit-content;
+    }
+    .channel-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--clr-muted);
+      cursor: pointer;
+      transition: all var(--tr-fast);
+    }
+    .channel-tab-btn.active {
+      background: var(--clr-surface);
+      color: var(--clr-heading);
+      box-shadow: var(--shadow-xs);
+      font-weight: 600;
+    }
+    .channel-tab-btn.active.whatsapp {
+      color: #128C7E;
+    }
+
+    .editor-meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-4);
+    }
+
+    .draft-textarea-wrapper {
+      position: relative;
+      margin-bottom: var(--sp-3);
+    }
+    .draft-textarea {
+      width: 100%;
+      min-height: 250px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 14px 16px;
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      background: var(--clr-surface);
+      color: var(--clr-heading);
+      outline: none;
+      resize: vertical;
+      transition: border-color var(--tr-fast), box-shadow var(--tr-fast);
+    }
+    .draft-textarea:focus {
+      border-color: var(--clr-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .textarea-status-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--clr-muted);
+      margin-bottom: var(--sp-4);
+    }
+
+    /* Compliance strip */
+    .compliance-strip {
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: #065F46;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: var(--sp-4);
+    }
+    .compliance-strip i {
+      font-size: 16px;
+      color: var(--clr-success);
+      flex-shrink: 0;
+    }
+
+    /* Version History Compact */
+    .version-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      margin-bottom: 6px;
+      background: #F8FAFC;
+    }
+    .version-item.current {
+      background: var(--clr-primary-light);
+      border-color: #BFDBFE;
+    }
+
+    /* Right Panel AI Insights */
+    .confidence-meter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      margin-bottom: var(--sp-4);
+    }
+    .confidence-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(6, 182, 212, 0.2);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--clr-accent), var(--clr-primary));
+      border-radius: var(--radius-full);
+      width: 82%;
+    }
+    .confidence-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--clr-heading);
+    }
+
+    .fact-item {
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(6, 182, 212, 0.15);
+      line-height: 1.4;
+    }
+    .fact-item:last-child {
+      border-bottom: none;
+    }
+    .fact-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--clr-primary);
+      margin-top: 2px;
+    }
+
+    .tone-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: var(--sp-2);
+    }
+    .tone-btn {
+      padding: 5px 8px;
+      font-size: 11.5px;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: var(--radius-sm);
+      background: var(--clr-surface);
+      color: var(--clr-text);
+      cursor: pointer;
+      transition: all var(--tr-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .tone-btn:hover {
+      background: var(--clr-accent-light);
+      border-color: var(--clr-accent);
+      color: #0E7490;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <a href="../dashboard.html" class="sidebar-brand">
+      <div class="brand-mark">A</div>
+      <div>
+        <div class="brand-name">ACAA</div>
+        <div class="brand-sub">AI Client Acquisition</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <!-- Main Group -->
+      <div class="nav-group">
+        <div class="nav-group-label">Main</div>
+        <a href="../dashboard.html" class="nav-item">
+          <i class="bi bi-grid-1x2"></i>
+          <span class="nav-item-label">Overview</span>
+        </a>
+      </div>
+
+      <!-- Leads Group -->
+      <div class="nav-group">
+        <div class="nav-group-label">Leads</div>
+        <a href="../leads/discover.html" class="nav-item">
+          <i class="bi bi-search"></i>
+          <span class="nav-item-label">Lead Discovery</span>
+        </a>
+        <a href="../leads/index.html" class="nav-item">
+          <i class="bi bi-people"></i>
+          <span class="nav-item-label">All Leads</span>
+        </a>
+        <a href="../verification/index.html" class="nav-item">
+          <i class="bi bi-shield-check"></i>
+          <span class="nav-item-label">Verification Queue</span>
+          <span class="nav-badge">7</span>
+        </a>
+      </div>
+
+      <!-- Outreach Group -->
+      <div class="nav-group">
+        <div class="nav-group-label">Outreach</div>
+        <a href="../outreach/editor.html" class="nav-item active">
+          <i class="bi bi-robot"></i>
+          <span class="nav-item-label">AI Outreach</span>
+        </a>
+        <a href="../approvals/index.html" class="nav-item">
+          <i class="bi bi-check2-square"></i>
+          <span class="nav-item-label">Approval Center</span>
+          <span class="nav-badge">4</span>
+        </a>
+        <a href="../whatsapp/details.html" class="nav-item">
+          <i class="bi bi-whatsapp"></i>
+          <span class="nav-item-label">WhatsApp Tracking</span>
+        </a>
+      </div>
+
+      <!-- Demo Group -->
+      <div class="nav-group">
+        <div class="nav-group-label">Demo</div>
+        <a href="../demos/index.html" class="nav-item">
+          <i class="bi bi-laptop"></i>
+          <span class="nav-item-label">Demo Studio</span>
+        </a>
+        <a href="../deployments/index.html" class="nav-item">
+          <i class="bi bi-cloud-upload"></i>
+          <span class="nav-item-label">Deployments</span>
+        </a>
+      </div>
+
+      <!-- Reports Group -->
+      <div class="nav-group">
+        <div class="nav-group-label">Reports</div>
+        <a href="../analytics/index.html" class="nav-item">
+          <i class="bi bi-bar-chart-line"></i>
+          <span class="nav-item-label">Analytics</span>
+        </a>
+      </div>
+
+      <!-- Admin Group -->
+      <div class="nav-group">
+        <div class="nav-group-label">Admin</div>
+        <a href="../integrations/index.html" class="nav-item">
+          <i class="bi bi-plug"></i>
+          <span class="nav-item-label">Integrations</span>
+        </a>
+        <a href="../team/index.html" class="nav-item">
+          <i class="bi bi-people-fill"></i>
+          <span class="nav-item-label">Team &amp; Roles</span>
+        </a>
+        <a href="../audit/index.html" class="nav-item">
+          <i class="bi bi-journal-text"></i>
+          <span class="nav-item-label">Audit Log</span>
+        </a>
+        <a href="../settings/index.html" class="nav-item">
+          <i class="bi bi-gear"></i>
+          <span class="nav-item-label">Settings</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">SA</div>
+        <div class="user-info">
+          <div class="user-name">Sarah Al-Mansoori</div>
+          <div class="user-role">Operations Lead</div>
+        </div>
+      </div>
+      <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Toggle Sidebar">
+        <i class="bi bi-layout-sidebar"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open mobile menu">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+        <a href="../dashboard.html">ACAA</a>
+        <span class="sep">/</span>
+        <a href="../outreach/editor.html">Outreach</a>
+        <span class="sep">/</span>
+        <span class="current">AI Outreach Workspace</span>
+      </nav>
+
+      <div class="topbar-search">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" id="global-search" placeholder="Search leads, domains, phone...">
+      </div>
+
+      <div class="topbar-actions">
+        <button class="icon-btn" id="notif-btn" title="Notifications">
+          <i class="bi bi-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="topbar-avatar" title="Sarah Al-Mansoori">SA</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">AI Outreach Workspace</h1>
+          <p class="page-subtitle">Review and edit AI-generated message drafts</p>
+        </div>
+        <div class="page-actions">
+          <a href="../approvals/index.html" class="btn btn-secondary btn-sm">
+            <i class="bi bi-check2-square"></i> View Approval Center (4)
+          </a>
+          <button class="btn btn-outline btn-sm" onclick="exportDraftPreview()">
+            <i class="bi bi-box-arrow-up-right"></i> External Preview
+          </button>
+        </div>
+      </div>
+
+      <!-- 3-Panel Workspace Layout -->
+      <div class="outreach-workspace">
+
+        <!-- ========================================== -->
+        <!-- LEFT PANEL: Lead Selector & Summary Card  -->
+        <!-- ========================================== -->
+        <div class="workspace-left">
+          <div class="card card-sm mb-4">
+            <div class="card-header" style="margin-bottom:var(--sp-3);">
+              <span class="card-title" style="font-size:13.5px;"><i class="bi bi-people-fill text-primary"></i> Target Leads (5)</span>
+              <span class="label">Priority</span>
+            </div>
+
+            <!-- List of 5 leads with status badges -->
+            <div class="lead-picker-list" id="lead-picker-list">
+              <!-- Lead 1: TechBuild Solutions (Active) -->
+              <div class="lead-picker-item active" onclick="selectLead('techbuild')" id="item-techbuild">
+                <div class="lead-picker-item-top">
+                  <span class="lead-picker-name">TechBuild Solutions</span>
+                  <span class="badge badge-draft-ready">Draft Ready</span>
+                </div>
+                <div class="lead-picker-sub">
+                  <span>Dubai &bull; Technology</span>
+                  <span class="score-badge score-high" style="width:30px;height:20px;font-size:11px;">87</span>
+                </div>
+              </div>
+
+              <!-- Lead 2: Metro Digital Agency -->
+              <div class="lead-picker-item" onclick="selectLead('metro')" id="item-metro">
+                <div class="lead-picker-item-top">
+                  <span class="lead-picker-name">Metro Digital Agency</span>
+                  <span class="badge badge-draft-ready">Draft Ready</span>
+                </div>
+                <div class="lead-picker-sub">
+                  <span>London &bull; E-commerce</span>
+                  <span class="score-badge score-medium" style="width:30px;height:20px;font-size:11px;">72</span>
+                </div>
+              </div>
+
+              <!-- Lead 3: Urban Analytics Co -->
+              <div class="lead-picker-item" onclick="selectLead('urban')" id="item-urban">
+                <div class="lead-picker-item-top">
+                  <span class="lead-picker-name">Urban Analytics Co</span>
+                  <span class="badge badge-needs-review">Needs Review</span>
+                </div>
+                <div class="lead-picker-sub">
+                  <span>New York &bull; Finance</span>
+                  <span class="score-badge score-high" style="width:30px;height:20px;font-size:11px;">91</span>
+                </div>
+              </div>
+
+              <!-- Lead 4: Pacific Web Designs -->
+              <div class="lead-picker-item" onclick="selectLead('pacific')" id="item-pacific">
+                <div class="lead-picker-item-top">
+                  <span class="lead-picker-name">Pacific Web Designs</span>
+                  <span class="badge badge-draft-ready">Draft Ready</span>
+                </div>
+                <div class="lead-picker-sub">
+                  <span>Sydney &bull; Healthcare</span>
+                  <span class="score-badge score-medium" style="width:30px;height:20px;font-size:11px;">78</span>
+                </div>
+              </div>
+
+              <!-- Lead 5: Sunrise E-commerce Ltd -->
+              <div class="lead-picker-item" onclick="selectLead('sunrise')" id="item-sunrise">
+                <div class="lead-picker-item-top">
+                  <span class="lead-picker-name">Sunrise E-commerce Ltd</span>
+                  <span class="badge badge-pending">Pending</span>
+                </div>
+                <div class="lead-picker-sub">
+                  <span>Singapore &bull; Retail</span>
+                  <span class="score-badge score-medium" style="width:30px;height:20px;font-size:11px;">65</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selected Lead Summary Card -->
+          <div class="selected-lead-summary" id="lead-summary-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-2);">
+              <h4 id="summary-lead-name" style="font-size:14px;font-weight:700;color:var(--clr-heading);">TechBuild Solutions</h4>
+              <span id="summary-lead-score" class="score-badge score-high">87</span>
+            </div>
+            <div style="margin-bottom:var(--sp-3);" id="summary-badge-container">
+              <span class="badge badge-draft-ready" id="summary-status-badge">Draft Ready</span>
+            </div>
+
+            <div class="lead-detail-row">
+              <span class="text-muted">Contact:</span>
+              <strong id="summary-contact-name">Omar Farooq (CTO)</strong>
+            </div>
+            <div class="lead-detail-row">
+              <span class="text-muted">WhatsApp:</span>
+              <span class="masked" id="summary-phone">+971 50 842 1904</span>
+            </div>
+            <div class="lead-detail-row">
+              <span class="text-muted">Domain:</span>
+              <a href="#" id="summary-domain" style="font-weight:500;">techbuild.ae</a>
+            </div>
+            <div class="lead-detail-row">
+              <span class="text-muted">Location:</span>
+              <span id="summary-location">Business Bay, Dubai</span>
+            </div>
+
+            <div class="divider" style="margin:var(--sp-3) 0;"></div>
+
+            <div class="label" style="margin-bottom:4px;">Top 3 Evidence Items:</div>
+            <div id="summary-evidence-list">
+              <div class="evidence-mini-item">
+                <i class="bi bi-speedometer2"></i>
+                <span>Mobile PageSpeed 38/100; First Contentful Paint is 4.2s on mobile devices.</span>
+              </div>
+              <div class="evidence-mini-item">
+                <i class="bi bi-briefcase"></i>
+                <span>Recent LinkedIn job post for Senior Full-Stack Engineer expired without hire.</span>
+              </div>
+              <div class="evidence-mini-item">
+                <i class="bi bi-star-half"></i>
+                <span>Google Reviews mention slow booking portal response times (3.8★ avg).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- CENTER PANEL: Message Editor & Controls   -->
+        <!-- ========================================== -->
+        <div class="workspace-center">
+          <div class="editor-card">
+
+            <!-- Selected Lead Heading & Channel Tabs -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-3);margin-bottom:var(--sp-4);">
+              <div>
+                <span class="label" style="color:var(--clr-primary);">Drafting Outreach For:</span>
+                <h2 id="center-lead-title" style="font-size:20px;font-weight:700;color:var(--clr-heading);margin-top:2px;">TechBuild Solutions</h2>
+              </div>
+
+              <!-- Channel Selector Tabs -->
+              <div class="channel-tabs" role="tablist">
+                <button type="button" class="channel-tab-btn active whatsapp" id="channel-wa-btn" onclick="switchChannel('whatsapp')">
+                  <i class="bi bi-whatsapp"></i> WhatsApp
+                </button>
+                <button type="button" class="channel-tab-btn" id="channel-email-btn" onclick="switchChannel('email')">
+                  <i class="bi bi-envelope"></i> Email
+                </button>
+              </div>
+            </div>
+
+            <!-- Meta Controls: Template & Language -->
+            <div class="editor-meta-bar">
+              <div style="display:flex;align-items:center;gap:var(--sp-2);flex:1;min-width:240px;">
+                <label class="form-label" style="margin-bottom:0;font-size:12px;white-space:nowrap;">Template:</label>
+                <select class="form-control form-select" id="template-select" style="padding:6px 12px;font-size:13px;" onchange="handleTemplateChange()">
+                  <option value="modern-web" selected>Modern Web Revamp &amp; Speed Optimization</option>
+                  <option value="lead-gen">B2B Tech Lead Generation &amp; Client Acquisition</option>
+                  <option value="custom-demo">Interactive Cloud Estimator Prototype Demo</option>
+                </select>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:var(--sp-2);min-width:160px;">
+                <label class="form-label" style="margin-bottom:0;font-size:12px;white-space:nowrap;">Language:</label>
+                <select class="form-control form-select" id="language-select" style="padding:6px 12px;font-size:13px;" onchange="handleLanguageChange()">
+                  <option value="en" selected>English (US/UK)</option>
+                  <option value="ar">Arabic (Gulf / UAE)</option>
+                  <option value="fr">French</option>
+                  <option value="es">Spanish</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
+
+              <span class="ai-label">
+                <i class="bi bi-stars"></i> AI Generated
+              </span>
+            </div>
+
+            <!-- AI Warning Strip (Amber) -->
+            <div class="ai-warning mb-4">
+              <i class="bi bi-exclamation-triangle-fill" style="font-size:15px;margin-top:1px;color:var(--clr-warning);"></i>
+              <div>
+                <strong>AI-generated draft — not yet sent.</strong> Review facts and tone carefully before requesting operator approval.
+              </div>
+            </div>
+
+            <!-- Editable Draft Textarea -->
+            <div class="draft-textarea-wrapper">
+              <textarea
+                class="draft-textarea"
+                id="outreach-draft-textarea"
+                spellcheck="true"
+                oninput="handleDraftInput()"
+              >Hi Omar, noticed TechBuild Solutions is expanding your engineering consultancy across the GCC this quarter. Congratulations on the recent projects in Business Bay!
+
+While reviewing techbuild.ae, I spotted that your client portal's mobile checkout is clocking a 4.2s First Contentful Paint, and the interactive project estimator is dropping sessions on iOS devices. We recently rebuilt an identical stack for a Dubai-based consultancy, cutting their load time to 850ms and lifting qualified demo bookings by 44% in under 30 days.
+
+We’ve already spun up an unbranded, high-speed preview showing how your new mobile-first architecture and instant quotation module could look: https://demo.acaa-agent.io/techbuild-preview
+
+Would 10 minutes this Thursday at 2 PM GST suit you for a quick walkthrough, or should I send over the technical breakdown here on WhatsApp?</textarea>
+            </div>
+
+            <!-- Textarea Status Footer -->
+            <div class="textarea-status-footer">
+              <div style="display:flex;align-items:center;gap:var(--sp-3);">
+                <span id="char-count-indicator"><strong>784</strong> chars &bull; ~3 WhatsApp bubbles</span>
+                <span style="color:var(--clr-muted);">&bull;</span>
+                <span id="word-count-indicator">138 words</span>
+              </div>
+              <div>
+                <span class="badge badge-discovered" id="draft-version-pill"><i class="bi bi-git"></i> Draft v2 (#a7f9c2)</span>
+              </div>
+            </div>
+
+            <!-- Do Not Contact (DNC) Check Banner -->
+            <div class="compliance-strip" id="compliance-strip">
+              <i class="bi bi-shield-fill-check"></i>
+              <div style="flex:1;">
+                <strong>Do Not Contact Check Passed:</strong>
+                <span id="dnc-details">Recipient (+971 50 842 1904) verified against UAE TCRA DNC registry and suppression lists (Checked 8 mins ago).</span>
+              </div>
+              <span class="badge badge-qualified" style="font-size:11px;">Cleared</span>
+            </div>
+
+            <!-- Primary Action Buttons -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-3);margin-bottom:var(--sp-6);">
+              <div style="display:flex;gap:var(--sp-2);">
+                <button type="button" class="btn btn-secondary" onclick="regenerateDraft()">
+                  <i class="bi bi-arrow-clockwise"></i> Regenerate
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                  <i class="bi bi-floppy"></i> Save Draft
+                </button>
+              </div>
+
+              <div>
+                <button type="button" class="btn btn-primary" onclick="openApprovalRequestModal()">
+                  <i class="bi bi-check2-circle"></i> Request Approval
+                </button>
+              </div>
+            </div>
+
+            <!-- Version History (Compact List of 2 Previous Versions) -->
+            <div style="border-top:1px solid var(--clr-border);padding-top:var(--sp-4);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-2);">
+                <span class="label">Version History</span>
+                <span style="font-size:11.5px;color:var(--clr-muted);">2 revisions recorded</span>
+              </div>
+
+              <div class="version-item current">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="badge badge-ai" style="font-size:10px;padding:1px 6px;">v2 Active</span>
+                  <strong style="color:var(--clr-heading);">Draft v2 (Claude 3.5 Sonnet)</strong>
+                  <span class="text-muted">&bull; 14 mins ago &bull; +26 words added</span>
+                </div>
+                <span style="font-size:11.5px;color:var(--clr-primary);font-weight:600;">Currently Editing</span>
+              </div>
+
+              <div class="version-item">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="badge badge-discovered" style="font-size:10px;padding:1px 6px;">v1</span>
+                  <strong style="color:var(--clr-heading);">Initial Generator (GPT-4o)</strong>
+                  <span class="text-muted">&bull; 2 hours ago &bull; 112 words</span>
+                </div>
+                <button type="button" class="btn btn-ghost btn-sm" style="padding:2px 8px;font-size:11.5px;" onclick="restoreVersion1()">
+                  <i class="bi bi-clock-history"></i> Restore
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- RIGHT PANEL: AI Rationale & Intelligence   -->
+        <!-- ========================================== -->
+        <div class="workspace-right">
+          <div class="ai-panel">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);">
+              <h3 style="font-size:14px;font-weight:700;color:var(--clr-heading);display:flex;align-items:center;gap:6px;">
+                <i class="bi bi-lightbulb-fill" style="color:var(--clr-accent);"></i> AI Rationale
+              </h3>
+              <span class="ai-label"><i class="bi bi-cpu"></i> Reasoning Engine</span>
+            </div>
+
+            <!-- Confidence Score -->
+            <div style="margin-bottom:var(--sp-4);">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span class="label" style="font-size:11px;">Outreach Confidence</span>
+                <span class="confidence-val" id="confidence-score-val">82%</span>
+              </div>
+              <div class="confidence-meter">
+                <div class="confidence-bar">
+                  <div class="confidence-fill" id="confidence-score-fill"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bullet List of Rationale -->
+            <div style="margin-bottom:var(--sp-4);">
+              <span class="label" style="font-size:11px;display:block;margin-bottom:6px;">Targeting Rationale:</span>
+              <ul style="font-size:12px;color:var(--clr-text);line-height:1.45;padding-left:16px;list-style-type:disc;" id="ai-rationale-bullets">
+                <li style="margin-bottom:6px;">High intent signal: active hiring for tech engineering roles combined with underperforming website metrics.</li>
+                <li style="margin-bottom:6px;">Lead score 87/100 aligns with UAE high-value consultancy archetype.</li>
+                <li style="margin-bottom:6px;">Strong synergy with recent Dubai Silicon Oasis web speed case studies.</li>
+              </ul>
+            </div>
+
+            <div class="divider" style="margin:var(--sp-3) 0;opacity:.5;"></div>
+
+            <!-- Facts Used Section -->
+            <div style="margin-bottom:var(--sp-4);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                <span class="label" style="font-size:11px;">Facts Used (4 Sources):</span>
+                <i class="bi bi-patch-check-fill text-success" style="font-size:12px;"></i>
+              </div>
+
+              <div id="ai-facts-list">
+                <div class="fact-item">
+                  <div>PageSpeed mobile score is 38/100; First Contentful Paint is 4.2s on techbuild.ae.</div>
+                  <div class="fact-source"><i class="bi bi-link-45deg"></i> Google PageSpeed API &bull; 2h ago</div>
+                </div>
+                <div class="fact-item">
+                  <div>Omar Farooq verified as active decision-maker (posted on LinkedIn 48h ago).</div>
+                  <div class="fact-source"><i class="bi bi-linkedin"></i> LinkedIn Sales Navigator</div>
+                </div>
+                <div class="fact-item">
+                  <div>Active commercial license verified in Dubai Economy &amp; Tourism register.</div>
+                  <div class="fact-source"><i class="bi bi-building"></i> Dubai DED Open API</div>
+                </div>
+                <div class="fact-item">
+                  <div>14-member engineering team situated in Business Bay, Dubai.</div>
+                  <div class="fact-source"><i class="bi bi-geo-alt"></i> Apollo.io &amp; Clutch.co</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Warnings Section -->
+            <div class="mb-4">
+              <span class="label" style="font-size:11px;display:block;margin-bottom:6px;">Outreach Constraints:</span>
+              <div class="ai-warning" style="font-size:11.5px;padding:8px 10px;">
+                <i class="bi bi-clock-fill" style="font-size:13px;color:var(--clr-warning);margin-top:1px;flex-shrink:0;"></i>
+                <div>
+                  <strong>Target Timezone: GST (UTC+4).</strong> Outbound window opens at 09:00 GST. Ensure delivery schedule respects local business hours.
+                </div>
+              </div>
+            </div>
+
+            <!-- Tone Quick Adjustments / Regenerate -->
+            <div>
+              <span class="label" style="font-size:11px;display:block;margin-bottom:6px;">Adjust Draft Tone:</span>
+              <div class="tone-buttons-grid">
+                <button type="button" class="tone-btn" onclick="adjustTone('concise')">
+                  <i class="bi bi-lightning"></i> Concise
+                </button>
+                <button type="button" class="tone-btn" onclick="adjustTone('technical')">
+                  <i class="bi bi-code"></i> Technical
+                </button>
+                <button type="button" class="tone-btn" onclick="adjustTone('casual')">
+                  <i class="bi bi-chat-heart"></i> Friendly
+                </button>
+                <button type="button" class="tone-btn" onclick="adjustTone('cta')">
+                  <i class="bi bi-bullseye"></i> Strong CTA
+                </button>
+              </div>
+
+              <button type="button" class="btn btn-ghost btn-sm w-full mt-3" style="font-size:11.5px;border:1px dashed rgba(6,182,212,.4);justify-content:center;" onclick="customPromptRegen()">
+                <i class="bi bi-pencil-square"></i> Regenerate with Custom Prompt...
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Request Approval Confirmation Modal -->
+<div class="modal-backdrop" id="request-approval-modal" style="display:none;">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:var(--sp-3);">
+        <div class="confirm-icon success" style="width:40px;height:40px;font-size:20px;margin:0;">
+          <i class="bi bi-send-check"></i>
+        </div>
+        <div>
+          <h2 class="modal-title">Request Outreach Approval</h2>
+          <div style="font-size:12.5px;color:var(--clr-muted);">Submit message payload to Approval Center queue</div>
+        </div>
+      </div>
+      <button class="modal-close" data-modal-close="request-approval-modal" aria-label="Close modal">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Summary Table of Request -->
+      <div style="background:#F8FAFC;border:1px solid var(--clr-border);border-radius:var(--radius-md);padding:var(--sp-4);margin-bottom:var(--sp-4);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);font-size:13px;">
+          <div>
+            <span class="text-muted" style="font-size:11.5px;text-transform:uppercase;">Recipient</span>
+            <div style="font-weight:600;color:var(--clr-heading);" id="modal-req-recipient">Omar Farooq &bull; Founder &amp; CTO</div>
+            <div class="masked" style="display:inline-block;margin-top:2px;" id="modal-req-phone">+971 50 842 1904</div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size:11.5px;text-transform:uppercase;">Dispatch Channel</span>
+            <div style="font-weight:600;color:#128C7E;display:flex;align-items:center;gap:5px;margin-top:2px;">
+              <i class="bi bi-whatsapp"></i> WhatsApp Business API
+            </div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size:11.5px;text-transform:uppercase;">Payload Version</span>
+            <div style="font-family:monospace;font-size:12px;font-weight:600;color:var(--clr-heading);">Draft v2 #a7f9c2</div>
+          </div>
+          <div>
+            <span class="text-muted" style="font-size:11.5px;text-transform:uppercase;">Compliance Check</span>
+            <div style="color:var(--clr-success);font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:4px;">
+              <i class="bi bi-check-circle-fill"></i> DNC Registry &amp; Opt-in Cleared
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exact message preview -->
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label" style="font-size:12.5px;">Exact Payload Content to be Reviewed:</label>
+        <div
+          id="modal-exact-message-preview"
+          style="background:#FFF;border:1px solid var(--clr-border);border-radius:var(--radius-md);padding:14px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:var(--clr-heading);max-height:220px;overflow-y:auto;border-left:4px solid #128C7E;"
+        ></div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-modal-close="request-approval-modal">Cancel</button>
+      <button type="button" class="btn btn-primary" onclick="confirmApprovalSubmission()">
+        <i class="bi bi-check2"></i> Confirm &amp; Submit to Approval Center
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="../js/app.js"></script>
+<script>
+  // Lead state data
+  const leadsData = {
+    techbuild: {
+      name: 'TechBuild Solutions',
+      score: 87,
+      scoreClass: 'score-high',
+      status: 'Draft Ready',
+      statusBadge: 'badge-draft-ready',
+      contact: 'Omar Farooq (CTO)',
+      phone: '+971 50 842 1904',
+      domain: 'techbuild.ae',
+      location: 'Business Bay, Dubai',
+      confidence: '82%',
+      confidenceNum: 82,
+      evidence: [
+        { icon: 'bi-speedometer2', text: 'Mobile PageSpeed 38/100; First Contentful Paint is 4.2s on mobile devices.' },
+        { icon: 'bi-briefcase', text: 'Recent LinkedIn job post for Senior Full-Stack Engineer expired without hire.' },
+        { icon: 'bi-star-half', text: 'Google Reviews mention slow booking portal response times (3.8★ avg).' }
+      ],
+      draft: `Hi Omar, noticed TechBuild Solutions is expanding your engineering consultancy across the GCC this quarter. Congratulations on the recent projects in Business Bay!
+
+While reviewing techbuild.ae, I spotted that your client portal's mobile checkout is clocking a 4.2s First Contentful Paint, and the interactive project estimator is dropping sessions on iOS devices. We recently rebuilt an identical stack for a Dubai-based consultancy, cutting their load time to 850ms and lifting qualified demo bookings by 44% in under 30 days.
+
+We’ve already spun up an unbranded, high-speed preview showing how your new mobile-first architecture and instant quotation module could look: https://demo.acaa-agent.io/techbuild-preview
+
+Would 10 minutes this Thursday at 2 PM GST suit you for a quick walkthrough, or should I send over the technical breakdown here on WhatsApp?`
+    },
+    metro: {
+      name: 'Metro Digital Agency',
+      score: 72,
+      scoreClass: 'score-medium',
+      status: 'Draft Ready',
+      statusBadge: 'badge-draft-ready',
+      contact: 'David Miller (MD)',
+      phone: '+44 7911 204918',
+      domain: 'metrodigital.co.uk',
+      location: 'Shoreditch, London',
+      confidence: '78%',
+      confidenceNum: 78,
+      evidence: [
+        { icon: 'bi-cart-x', text: 'Shopify checkout staging subdomain redirects with broken SSL handshake.' },
+        { icon: 'bi-award', text: 'Clutch rank #4 in London Shopify agencies but low organic mobile visibility.' },
+        { icon: 'bi-envelope-exclamation', text: 'Corporate domain MX records in migration transition.' }
+      ],
+      draft: `Hi David, saw Metro Digital’s impressive recent e-commerce launches for UK retail brands on Clutch.
+
+While testing metrodigital.co.uk on mobile Safari, we noticed your case study demo checkout redirects to an unindexed staging URL, likely causing a drop-off among potential enterprise merchants comparing agencies.
+
+We engineered an automated client demonstration environment that runs on edge workers with zero cold start latency. You can inspect an unbranded sample here: https://demo.acaa-agent.io/metro-speed
+
+Are you free for 10 minutes this Wednesday at 11 AM GMT to explore how this could elevate your inbound conversion?`
+    },
+    urban: {
+      name: 'Urban Analytics Co',
+      score: 91,
+      scoreClass: 'score-high',
+      status: 'Needs Review',
+      statusBadge: 'badge-needs-review',
+      contact: 'Marcus Vance (Data Lead)',
+      phone: '+1 212 555 0192',
+      domain: 'urbananalytics.io',
+      location: 'Manhattan, New York',
+      confidence: '89%',
+      confidenceNum: 89,
+      evidence: [
+        { icon: 'bi-currency-dollar', text: 'Closed $2.4M Seed round with Bowery Capital.' },
+        { icon: 'bi-shield-exclamation', text: 'Primary info@ email bounced during initial verification.' },
+        { icon: 'bi-cloud-arrow-up', text: 'GovCloud telemetry endpoints active on US-East-1.' }
+      ],
+      draft: `Hi Marcus, congratulations on the recent Seed round with Bowery Capital to scale Urban Analytics!
+
+I took a deep look into your public telemetry reporting dashboards. While your modeling accuracy is elite, the public preview embeds take over 5 seconds to hydrate on mobile browsers due to unbundled charting scripts.
+
+We built an ultra-lean WebAssembly rendering pipeline that renders complex time-series financial datasets in under 120ms. Spun up a quick private sandbox with dummy ticker data: https://demo.acaa-agent.io/urban-telemetry
+
+Would Thursday morning suit for a brief 10-minute sync, or should I ping you the benchmarks over WhatsApp?`
+    },
+    pacific: {
+      name: 'Pacific Web Designs',
+      score: 78,
+      scoreClass: 'score-medium',
+      status: 'Draft Ready',
+      statusBadge: 'badge-draft-ready',
+      contact: 'Liam O\'Connor (Founder)',
+      phone: '+61 412 889 012',
+      domain: 'pacificwebdesigns.com.au',
+      location: 'Surry Hills, Sydney',
+      confidence: '75%',
+      confidenceNum: 75,
+      evidence: [
+        { icon: 'bi-shield-slash', text: 'Mixed content HTTP script warning on clinic intake form.' },
+        { icon: 'bi-facebook', text: 'Recent post promoting medical practice web revamps.' },
+        { icon: 'bi-telephone', text: 'Secondary mobile contact verified via YellowPages AU.' }
+      ],
+      draft: `Hi Liam, noticed Pacific Web Designs has been delivering great bespoke platforms for private medical clinics in NSW.
+
+While testing pacificwebdesigns.com.au, our automated audit flagged an unencrypted HTTP iframe asset on the patient booking sample, which triggers a browser security prompt on modern Chrome and Safari releases.
+
+We recently helped an Australian healthcare consultancy resolve HIPAA/Privacy Act compliance issues while upgrading their booking speed to 98/100 Lighthouse score. Here is an interactive preview: https://demo.acaa-agent.io/pacific-health
+
+Could you spare 10 minutes this Thursday at 10 AM AEDT for a short screen share?`
+    },
+    sunrise: {
+      name: 'Sunrise E-commerce Ltd',
+      score: 65,
+      scoreClass: 'score-medium',
+      status: 'Pending',
+      statusBadge: 'badge-pending',
+      contact: 'Lin Wei (Head of Growth)',
+      phone: '+65 9182 3401',
+      domain: 'sunrise-ecom.sg',
+      location: 'Raffles Place, Singapore',
+      confidence: '68%',
+      confidenceNum: 68,
+      evidence: [
+        { icon: 'bi-shop', text: 'Shopify Plus store with 420+ products active.' },
+        { icon: 'bi-phone', text: 'Mobile contact verified through Singapore ACRA director search.' },
+        { icon: 'bi-credit-card', text: 'Stripe regional payment gateway enabled.' }
+      ],
+      draft: `Hi Lin, hope your Q1 retail campaign is off to a strong start at Sunrise E-commerce!
+
+While reviewing sunrise-ecom.sg, we noticed your mobile catalog takes over 4.5s to filter across Southeast Asian mobile networks, leading to cart drop-offs during flash promotions.
+
+We've developed an instant headless catalog accelerator that pre-renders SKU filters with sub-second page transitions. Check out this prototype preview: https://demo.acaa-agent.io/sunrise-catalog
+
+Would 10 minutes this Friday at 3 PM SGT work for a quick review?`
+    }
+  };
+
+  let activeLeadKey = 'techbuild';
+
+  function selectLead(key) {
+    if (!leadsData[key]) return;
+    activeLeadKey = key;
+    const data = leadsData[key];
+
+    // Update active class on left picker items
+    document.querySelectorAll('.lead-picker-item').forEach(el => el.classList.remove('active'));
+    const selectedItem = document.getElementById(`item-${key}`);
+    if (selectedItem) selectedItem.classList.add('active');
+
+    // Update left summary card
+    document.getElementById('summary-lead-name').textContent = data.name;
+    const scoreEl = document.getElementById('summary-lead-score');
+    scoreEl.textContent = data.score;
+    scoreEl.className = `score-badge ${data.scoreClass}`;
+    const badgeEl = document.getElementById('summary-status-badge');
+    badgeEl.textContent = data.status;
+    badgeEl.className = `badge ${data.statusBadge}`;
+    document.getElementById('summary-contact-name').textContent = data.contact;
+    document.getElementById('summary-phone').textContent = data.phone;
+    document.getElementById('summary-domain').textContent = data.domain;
+    document.getElementById('summary-location').textContent = data.location;
+
+    // Update evidence in summary
+    const evContainer = document.getElementById('summary-evidence-list');
+    evContainer.innerHTML = data.evidence.map(e => `
+      <div class="evidence-mini-item">
+        <i class="bi ${e.icon}"></i>
+        <span>${e.text}</span>
+      </div>
+    `).join('');
+
+    // Update center panel
+    document.getElementById('center-lead-title').textContent = data.name;
+    const textarea = document.getElementById('outreach-draft-textarea');
+    textarea.value = data.draft;
+    handleDraftInput();
+
+    // Update DNC details
+    document.getElementById('dnc-details').textContent = `Recipient (${data.phone}) verified against regulatory DNC registry and suppression lists (Checked 8 mins ago).`;
+
+    // Update right panel
+    document.getElementById('confidence-score-val').textContent = data.confidence;
+    document.getElementById('confidence-score-fill').style.width = `${data.confidenceNum}%`;
+
+    showToast({
+      title: 'Lead Loaded',
+      message: `Outreach draft and intelligence loaded for ${data.name}.`,
+      type: 'default'
+    });
+  }
+
+  function handleDraftInput() {
+    const text = document.getElementById('outreach-draft-textarea').value;
+    const chars = text.length;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const bubbles = Math.ceil(chars / 300);
+
+    document.getElementById('char-count-indicator').innerHTML = `<strong>${chars}</strong> chars &bull; ~${bubbles} WhatsApp bubble${bubbles > 1 ? 's' : ''}`;
+    document.getElementById('word-count-indicator').textContent = `${words} words`;
+  }
+
+  function switchChannel(channel) {
+    const waBtn = document.getElementById('channel-wa-btn');
+    const emailBtn = document.getElementById('channel-email-btn');
+
+    if (channel === 'whatsapp') {
+      waBtn.className = 'channel-tab-btn active whatsapp';
+      emailBtn.className = 'channel-tab-btn';
+      showToast({ title: 'Channel Switched', message: 'WhatsApp 1-to-1 conversational format selected.', type: 'default' });
+    } else {
+      emailBtn.className = 'channel-tab-btn active';
+      waBtn.className = 'channel-tab-btn';
+      showToast({ title: 'Channel Switched', message: 'Cold Email format with subject line header activated.', type: 'default' });
+    }
+  }
+
+  function handleTemplateChange() {
+    const val = document.getElementById('template-select').value;
+    showToast({ title: 'Template Selected', message: `Applying "${val}" blueprint to draft.`, type: 'default' });
+  }
+
+  function handleLanguageChange() {
+    const lang = document.getElementById('language-select').value;
+    showToast({ title: 'Language Updated', message: `Draft translated and localized for ${lang.toUpperCase()}.`, type: 'default' });
+  }
+
+  function regenerateDraft() {
+    const btn = event.currentTarget;
+    btn.classList.add('btn-loading');
+    setTimeout(() => {
+      btn.classList.remove('btn-loading');
+      showToast({
+        title: 'Draft Regenerated',
+        message: 'Claude 3.5 Sonnet generated fresh personalization angles.',
+        type: 'success'
+      });
+      document.getElementById('draft-version-pill').innerHTML = '<i class="bi bi-git"></i> Draft v3 (#f8b1c4)';
+    }, 750);
+  }
+
+  function saveDraft() {
+    showToast({
+      title: 'Draft Saved',
+      message: 'Draft revision saved to local cache and server repository.',
+      type: 'success'
+    });
+  }
+
+  function restoreVersion1() {
+    const textarea = document.getElementById('outreach-draft-textarea');
+    textarea.value = `Hi Omar, we noticed techbuild.ae has high mobile load times. We built an unbranded demo preview here: https://demo.acaa-agent.io/techbuild-preview. Would you be open to a 10-min chat Thursday?`;
+    handleDraftInput();
+    document.getElementById('draft-version-pill').innerHTML = '<i class="bi bi-git"></i> Draft v1 (Restored)';
+    showToast({
+      title: 'Version Restored',
+      message: 'Reverted to Draft v1 initial baseline template.',
+      type: 'default'
+    });
+  }
+
+  function adjustTone(tone) {
+    const current = leadsData[activeLeadKey];
+    const textarea = document.getElementById('outreach-draft-textarea');
+
+    if (tone === 'concise') {
+      textarea.value = `Hi Omar, congrats on TechBuild Solutions' expansion in Business Bay.
+
+We ran a performance check on techbuild.ae: mobile FCP is currently 4.2s with high checkout session drop-off. We built a fast modern preview with instant quotation here: https://demo.acaa-agent.io/techbuild-preview
+
+Could we connect for 10 minutes Thursday at 2 PM GST?`;
+    } else if (tone === 'technical') {
+      textarea.value = `Hi Omar, while analyzing techbuild.ae's Lighthouse bundle, we observed 4.2s FCP and render-blocking Webpack chunks impacting client portal conversion on iOS.
+
+We re-architected an identical Next.js 15 + Cloudflare edge stack for a UAE engineering firm, reducing TTFB to 40ms and lifting qualified conversions by 44%.
+
+Live sandbox preview: https://demo.acaa-agent.io/techbuild-preview
+
+Let me know if 10 mins this Thursday at 2 PM GST works for a technical review.`;
+    } else if (tone === 'casual') {
+      textarea.value = `Hi Omar! Big fan of the work TechBuild Solutions has been putting out in Business Bay lately.
+
+Spotted a couple quick optimization wins on your mobile site that could easily boost incoming inquiries (currently clocking ~4.2s load on mobile). Spun up a quick concept demo for you: https://demo.acaa-agent.io/techbuild-preview
+
+Would love to send over the quick breakdown or hop on a 5-min WhatsApp call Thursday if you're free?`;
+    } else if (tone === 'cta') {
+      textarea.value = `Omar, techbuild.ae's mobile load time is currently 4.2s, which according to Google benchmarks drops over 40% of prospective clients before they submit an inquiry.
+
+We built an exact, sub-second preview of your portal here: https://demo.acaa-agent.io/techbuild-preview
+
+Are you free for a 10-minute walkthrough this Thursday at 2 PM GST? Reply "Yes" and I'll send over the calendar invite.`;
+    }
+
+    handleDraftInput();
+    showToast({
+      title: 'Tone Adjusted',
+      message: `Message tailored with a ${tone.toUpperCase()} style.`,
+      type: 'default'
+    });
+  }
+
+  function customPromptRegen() {
+    const prompt = window.prompt("Enter specific instructions for the AI outreach rewrite (e.g., 'Emphasize GDPR compliance and mobile PWA benefits'):");
+    if (prompt) {
+      showToast({
+        title: 'Prompt Queued',
+        message: `Rewriting draft with instructions: "${prompt.slice(0, 35)}..."`,
+        type: 'default'
+      });
+      setTimeout(() => {
+        showToast({
+          title: 'Draft Updated',
+          message: 'AI successfully incorporated your custom prompt guidelines.',
+          type: 'success'
+        });
+      }, 900);
+    }
+  }
+
+  function exportDraftPreview() {
+    showToast({
+      title: 'Preview Link Generated',
+      message: 'Mobile preview URL copied to clipboard: https://acaa.io/p/preview-tb',
+      type: 'success'
+    });
+  }
+
+  // Request Approval Modal Flow
+  function openApprovalRequestModal() {
+    const data = leadsData[activeLeadKey];
+    const draftText = document.getElementById('outreach-draft-textarea').value;
+
+    document.getElementById('modal-req-recipient').textContent = `${data.contact} &bull; ${data.name}`;
+    document.getElementById('modal-req-phone').textContent = data.phone;
+    document.getElementById('modal-exact-message-preview').textContent = draftText;
+
+    openModal('request-approval-modal');
+  }
+
+  function confirmApprovalSubmission() {
+    closeModal('request-approval-modal');
+    showToast({
+      title: 'Approval Requested',
+      message: `Payload for ${leadsData[activeLeadKey].name} routed to Approval Center queue.`,
+      type: 'success'
+    });
+  }
+</script>
+</body>
+</html>
